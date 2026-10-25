@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietaryHealth – Login</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <script>window.DH_NO_AUTH = true;</script>
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px max(20px, env(safe-area-inset-left, 0px));
+    }
+    .auth-box { width: 100%; max-width: 420px; }
+    .auth-logo {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--fg);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .auth-logo span { color: var(--accent); }
+    .auth-sub {
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .auth-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--fg-muted);
+      margin-top: 20px;
+    }
+    .show-pass-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--fg-muted);
+      font-size: 13px;
+      font-family: inherit;
+      padding: 0;
+    }
+    .pass-wrap { position: relative; }
+    .pass-wrap input { padding-right: 60px; }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-box">
+
+    <div class="auth-logo">Dietary<span>Health</span></div>
+    <p class="auth-sub">Track your nutrition, reach your goals.</p>
+
+    <div class="card">
+      <div id="loginError" class="alert alert-danger" style="display:none"></div>
+
+      <div class="field">
+        <label class="field-label" for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
+        <div class="field-error" id="usernameError">Please enter your username.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+          <button class="show-pass-btn" type="button" onclick="togglePass('password', this)">Show</button>
+        </div>
+        <div class="field-error" id="passwordError">Please enter your password.</div>
+      </div>
+
+      <div style="text-align:right; margin-bottom:20px;">
+        <a href="#" style="font-size:13px; color:var(--fg-muted);">Forgot password?</a>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="handleLogin()">Log in</button>
+    </div>
+
+    <p class="auth-footer">
+      Don't have an account? <a href="register.html">Create one</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.textContent = isHidden ? 'Hide' : 'Show';
+  }
+
+  function handleLogin() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    let valid = true;
+
+    document.getElementById('usernameError').classList.remove('visible');
+    document.getElementById('passwordError').classList.remove('visible');
+    document.getElementById('loginError').style.display = 'none';
+
+    if (!username) {
+      document.getElementById('usernameError').classList.add('visible');
+      valid = false;
+    }
+    if (!password) {
+      document.getElementById('passwordError').classList.add('visible');
+      valid = false;
+    }
+    if (!valid) return;
+
+    // TODO: replace with real API call to backend
+    // fetch('/api/login', { method:'POST', body: JSON.stringify({username, password}) })
+    //   .then(r => r.json()).then(data => { localStorage.setItem('dh_user', JSON.stringify(data.user)); ... })
+
+    // For now: look up the user from localStorage (saved at registration)
+    let foundUser = null;
+    try {
+      const allUsers = JSON.parse(localStorage.getItem('dh_users') || '[]');
+      foundUser = allUsers.find(u => u.username === username && u.password === password);
+    } catch(e) {}
+
+    if (!foundUser) {
+      const err = document.getElementById('loginError');
+      err.textContent = 'Username or password is incorrect.';
+      err.style.display = 'block';
+      return;
+    }
+
+    // Save the active session user (without password)
+    const sessionUser = { username: foundUser.username, firstName: foundUser.firstName,
+                          lastName: foundUser.lastName, email: foundUser.email };
+    try { localStorage.setItem('dh_user', JSON.stringify(sessionUser)); } catch(e) {}
+
+    const btn = document.querySelector('.btn-primary');
+    btn.textContent = 'Logging in…';
+    btn.disabled = true;
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 600);
+  }
+
+  // Allow Enter key to submit
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

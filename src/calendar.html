@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietaryHealth – Calendar</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* ── Calendar layout ── */
+    .cal-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 820px) { .cal-layout { grid-template-columns: 1fr; } }
+
+    /* Month grid */
+    .cal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .cal-month-label { font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; font-weight: 400; flex: 1; }
+    .cal-nav-btn {
+      width: 34px; height: 34px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: var(--chip-bg);
+      cursor: pointer; font-size: 16px; font-family: inherit;
+      color: var(--fg); display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s;
+    }
+    .cal-nav-btn:hover { border-color: var(--accent); }
+    .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 6px; }
+    .cal-weekday {
+      text-align: center; font-size: 11px; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--fg-muted); padding: 4px 0;
+    }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day {
+      aspect-ratio: 1; border-radius: 8px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; font-weight: 500;
+      transition: background .12s; position: relative;
+      border: 1.5px solid transparent;
+    }
+    .cal-day:hover { background: var(--chip-bg); }
+    .cal-day.other-month { color: var(--fg-subtle); }
+    .cal-day.today { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .cal-day.selected { background: var(--accent); color: #fff !important; border-color: var(--accent); }
+    .cal-day.has-log::after {
+      content: ''; display: block; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--accent);
+      position: absolute; bottom: 4px;
+    }
+    .cal-day.selected.has-log::after { background: rgba(255,255,255,.7); }
+
+    /* Day panel */
+    .day-panel-date {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 20px; font-weight: 400; color: var(--fg);
+    }
+    .day-panel-cals { font-size: 13px; color: var(--fg-muted); margin-top: 2px; margin-bottom: 16px; }
+
+    /* Meal sections */
+    .meal-section { margin-bottom: 16px; }
+    .meal-section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--fg-muted); margin-bottom: 6px;
+    }
+
+    /* Logged meal row — clickable to edit */
+    .meal-entry {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      background: var(--chip-bg); margin-bottom: 5px;
+      cursor: pointer; border: 1.5px solid transparent;
+      transition: border-color .12s;
+    }
+    .meal-entry:hover { border-color: var(--accent); }
+    .meal-entry.editing { border-color: var(--accent); background: var(--accent-light); }
+    .meal-entry-info { flex: 1; min-width: 0; }
+    .meal-entry-name { font-size: 14px; font-weight: 500; }
+    .meal-entry-cals { font-size: 12px; color: var(--fg-muted); }
+    .meal-entry-del {
+      background: none; border: none; cursor: pointer;
+      color: var(--fg-muted); font-size: 18px; padding: 0 2px; flex-shrink: 0;
+      line-height: 1;
+    }
+    .meal-entry-del:hover { color: var(--danger); }
+
+    /* Inline edit row */
+    .inline-edit {
+      display: none; flex-direction: column; gap: 6px;
+      margin-bottom: 5px; padding: 10px 12px;
+      border: 1.5px solid var(--accent); border-radius: 8px;
+      background: var(--accent-light);
+    }
+    .inline-edit.open { display: flex; }
+    .inline-edit-row { display: flex; gap: 6px; }
+    .inline-edit-row input[type="text"] { flex: 1; font-size: 13px; padding: 7px 10px; }
+    .inline-edit-row input[type="number"] { width: 80px; font-size: 13px; padding: 7px 10px; }
+    .inline-edit-actions { display: flex; gap: 6px; }
+    .inline-edit-actions button { font-size: 13px; padding: 7px 14px; }
+
+    /* Empty slot — clickable to open inline add */
+    .meal-slot-empty {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 8px;
+      border: 1.5px dashed var(--border); color: var(--fg-muted);
+      font-size: 13px; cursor: pointer; margin-bottom: 5px;
+      transition: border-color .12s, color .12s;
+    }
+    .meal-slot-empty:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Add-meal area (bottom of panel, for free-form entry) */
+    .add-meal-wrap { margin-top: 4px; }
+    .add-meal-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px;
+    }
+    .add-meal-selects { display: flex; gap: 6px; margin-bottom: 8px; }
+    .add-meal-selects select { flex: 0 0 auto; width: auto; font-size: 13px; padding: 7px 10px; }
+    .add-meal-row { display: flex; gap: 8px; }
+    .add-meal-row input { flex: 1; }
+
+    .hints-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--fg-muted); margin: 10px 0 6px;
+    }
+    .add-meal-hints { display: flex; flex-wrap: wrap; gap: 6px; }
+    .hint-chip {
+      padding: 4px 10px; border-radius: 99px;
+      background: var(--chip-bg); color: var(--fg-muted);
+      font-size: 12px; cursor: pointer; border: 1px solid var(--border);
+      transition: border-color .12s, color .12s;
+    }
+    .hint-chip:hover { border-color: var(--accent); color: var(--fg); }
+
+    /* Water tracker (calendar panel) */
+    .water-section { margin-top: 16px; }
+    .water-section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px;
+    }
+    .water-cups-cal { display: flex; gap: 6px; flex-wrap: wrap; }
+    .cup-cal {
+      width: 34px; height: 34px; border-radius: 6px;
+      border: 2px solid #3a8ec8;
+      background: #daeeff;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      position: relative;
+    }
+    .cup-cal:hover { background: #bfdfff; }
+    .cup-cal.filled { background: #5aace8; border-color: #3a8ec8; }
+    .cup-cal.filled::after {
+      content: ''; position: absolute;
+      bottom: 4px; left: 4px; right: 4px; top: 4px;
+      border-radius: 3px; background: rgba(255,255,255,0.3);
+    }
+    .water-count-label { font-size: 13px; color: var(--fg-muted); margin-top: 6px; }
+
+    /* Day calorie summary */
+    .day-summary { margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+
+<div class="page">
+  <div class="page-eyebrow">Nutrition Log</div>
+  <h1 class="page-title" style="margin-bottom:0">Calendar</h1>
+  <p class="page-desc">Tap a day to log meals and track your intake.</p>
+
+  <div class="cal-layout">
+
+    <!-- Calendar grid -->
+    <div>
+      <div class="card">
+        <div class="cal-header">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)">&#8249;</button>
+          <div class="cal-month-label" id="calMonthLabel"></div>
+          <button class="cal-nav-btn" onclick="changeMonth(1)">&#8250;</button>
+        </div>
+        <div class="cal-weekdays">
+          <div class="cal-weekday">Su</div><div class="cal-weekday">Mo</div>
+          <div class="cal-weekday">Tu</div><div class="cal-weekday">We</div>
+          <div class="cal-weekday">Th</div><div class="cal-weekday">Fr</div>
+          <div class="cal-weekday">Sa</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+
+    <!-- Day detail panel -->
+    <div>
+      <div class="card" id="dayPanel">
+        <div class="day-panel-date" id="dayPanelDate">Select a day</div>
+        <div class="day-panel-cals" id="dayPanelCals"></div>
+
+        <div id="mealsContainer"></div>
+
+        <!-- Water tracker for this day -->
+        <div class="water-section" id="waterSection" style="display:none">
+          <hr class="divider" style="margin:12px 0">
+          <div class="water-section-label">Water</div>
+          <div class="water-cups-cal" id="waterCupsCal"></div>
+          <div class="water-count-label" id="waterCountLabel"></div>
+        </div>
+
+        <!-- Free-form log at bottom -->
+        <div class="add-meal-wrap" id="addMealWrap" style="display:none">
+          <hr class="divider" style="margin:12px 0">
+          <div class="add-meal-label">Log anything</div>
+          <div class="add-meal-selects">
+            <select id="mealSlot" onchange="renderHints()">
+              <option>Breakfast</option>
+              <option>Lunch</option>
+              <option>Dinner</option>
+              <option selected>Snack</option>
+            </select>
+          </div>
+          <div class="add-meal-row">
+            <input type="text" id="mealInput" placeholder="What did you eat?">
+            <button class="btn btn-primary" onclick="addMeal()">Add</button>
+          </div>
+          <div id="hintsSection" style="display:none">
+            <div class="hints-label">Based on your history</div>
+            <div class="add-meal-hints" id="hintChips"></div>
+          </div>
+        </div>
+
+        <div class="day-summary" id="daySummary" style="display:none">
+          <hr class="divider" style="margin:12px 0">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+            <span style="font-size:13px; font-weight:600; color:var(--fg-muted)">DAILY TOTAL</span>
+            <span style="font-weight:600; font-size:15px" id="daySummaryTotal"></span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" id="daySummaryBar" style="width:0%"></div>
+          </div>
+          <div class="stat-bar-labels" style="margin-top:4px">
+            <span id="daySummaryEaten"></span>
+            <span id="daySummaryLeft"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────
+const GOAL = 1800;
+const SLOTS = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+let viewYear, viewMonth, selectedDate;
+const today = new Date();
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+let mealLog = {};
+try { const s = localStorage.getItem('dh_mealLog'); if (s) mealLog = JSON.parse(s); } catch(e){}
+
+// Seed sample data
+const todayKey = dateKey(today);
+if (!mealLog[todayKey]) {
+  mealLog[todayKey] = [
+    { id: 1, slot: 'Breakfast', name: 'Oatmeal with banana and honey', kcal: 310 },
+    { id: 2, slot: 'Lunch',     name: 'Grilled chicken salad',         kcal: 480 },
+    { id: 3, slot: 'Snack',     name: 'Apple with almond butter',      kcal: 210 },
+  ];
+}
+const y = today.getFullYear(), m = today.getMonth();
+function seedDay(dy, entries) {
+  const d = new Date(y, m, today.getDate() + dy);
+  const k = dateKey(d);
+  if (!mealLog[k]) mealLog[k] = entries;
+}
+seedDay(-1, [
+  { id:10, slot:'Breakfast', name:'Scrambled eggs on toast', kcal:380 },
+  { id:11, slot:'Lunch',     name:'Chicken noodle soup',     kcal:420 },
+  { id:12, slot:'Dinner',    name:'Roast chicken and vegetables', kcal:560 },
+]);
+seedDay(-3, [
+  { id:20, slot:'Lunch',  name:'Burrito bowl', kcal:650 },
+  { id:21, slot:'Dinner', name:'Salmon with rice', kcal:490 },
+]);
+
+function dateKey(d) { return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
+function savelog() { try { localStorage.setItem('dh_mealLog', JSON.stringify(mealLog)); } catch(e){} }
+let nextId = Date.now();
+
+// ── Calendar ─────────────────────────────────────
+function changeMonth(delta) {
+  viewMonth += delta;
+  if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+  if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  document.getElementById('calMonthLabel').textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    addCell(daysInPrev - firstDay + 1 + i, true, new Date(viewYear, viewMonth - 1, daysInPrev - firstDay + 1 + i));
+  }
+  for (let d = 1; d <= daysInMonth; d++) addCell(d, false, new Date(viewYear, viewMonth, d));
+  const rem = (firstDay + daysInMonth) % 7;
+  if (rem > 0) for (let d = 1; d <= 7 - rem; d++) addCell(d, true, new Date(viewYear, viewMonth + 1, d));
+}
+
+function addCell(num, otherMonth, date) {
+  const cell = document.createElement('div');
+  cell.className = 'cal-day';
+  if (otherMonth) cell.classList.add('other-month');
+  if (isSameDay(date, today)) cell.classList.add('today');
+  if (selectedDate && isSameDay(date, selectedDate)) cell.classList.add('selected');
+  const k = dateKey(date);
+  if (mealLog[k] && mealLog[k].length > 0) cell.classList.add('has-log');
+  cell.textContent = num;
+  cell.onclick = () => selectDay(new Date(date));
+  document.getElementById('calGrid').appendChild(cell);
+}
+
+function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() &&
+         a.getMonth()    === b.getMonth()    &&
+         a.getDate()     === b.getDate();
+}
+
+// ── Day panel ─────────────────────────────────────
+let editingId = null; // which entry is currently open for edit
+
+function selectDay(date) {
+  selectedDate = date;
+  editingId = null;
+  renderCalendar();
+
+  const label = date.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  document.getElementById('dayPanelDate').textContent = label;
+  document.getElementById('addMealWrap').style.display = 'block';
+  document.getElementById('daySummary').style.display = 'block';
+  document.getElementById('waterSection').style.display = 'block';
+
+  renderDayPanel();
+  renderWaterCups();
+}
+
+function renderDayPanel() {
+  if (!selectedDate) return;
+  const key = dateKey(selectedDate);
+  const entries = mealLog[key] || [];
+
+  // Update calorie header
+  const total = entries.reduce((s, e) => s + (e.kcal || 0), 0);
+  document.getElementById('dayPanelCals').textContent =
+    total > 0 ? `${total} kcal logged` : 'Nothing logged yet';
+
+  const container = document.getElementById('mealsContainer');
+  container.innerHTML = '';
+
+  SLOTS.forEach(slot => {
+    const slotEntries = entries.filter(e => e.slot === slot);
+    const section = document.createElement('div');
+    section.className = 'meal-section';
+
+    const lbl = document.createElement('div');
+    lbl.className = 'meal-section-label';
+    lbl.textContent = slot;
+    section.appendChild(lbl);
+
+    if (slotEntries.length === 0) {
+      // Empty slot — click to open quick-add
+      const empty = document.createElement('div');
+      empty.className = 'meal-slot-empty';
+      empty.innerHTML = `<span style="font-size:16px; font-weight:300">+</span> Add ${slot.toLowerCase()}`;
+      empty.onclick = () => {
+        document.getElementById('mealSlot').value = slot;
+        document.getElementById('mealInput').focus();
+        window.scrollTo({ top: document.getElementById('addMealWrap').offsetTop - 20, behavior: 'smooth' });
+      };
+      section.appendChild(empty);
+    } else {
+      slotEntries.forEach(entry => {
+        // The logged meal row (click to open inline edit)
+        const row = document.createElement('div');
+        row.className = 'meal-entry' + (editingId === entry.id ? ' editing' : '');
+        row.innerHTML = `
+          <div class="meal-entry-info">
+            <div class="meal-entry-name">${entry.name}</div>
+            <div class="meal-entry-cals">${entry.kcal} kcal — click to edit</div>
+          </div>
+          <button class="meal-entry-del" title="Remove" onclick="removeEntry(event,'${key}',${entry.id})">&#215;</button>
+        `;
+        row.onclick = (e) => {
+          if (e.target.classList.contains('meal-entry-del')) return;
+          editingId = editingId === entry.id ? null : entry.id;
+          renderDayPanel();
+        };
+        section.appendChild(row);
+
+        // Inline edit form (shown only when this entry is being edited)
+        const editForm = document.createElement('div');
+        editForm.className = 'inline-edit' + (editingId === entry.id ? ' open' : '');
+        editForm.innerHTML = `
+          <div class="inline-edit-row">
+            <input type="text"   id="editName_${entry.id}" value="${entry.name}" placeholder="Food name">
+            <input type="number" id="editKcal_${entry.id}" value="${entry.kcal}" placeholder="kcal" min="0" max="5000">
+          </div>
+          <div class="inline-edit-actions">
+            <button class="btn btn-primary" onclick="saveEdit('${key}', ${entry.id})">Save</button>
+            <button class="btn btn-ghost" onclick="cancelEdit()">Cancel</button>
+          </div>
+        `;
+        section.appendChild(editForm);
+      });
+
+      // Also show a small "add another" empty row if slot already has entries
+      const addMore = document.createElement('div');
+      addMore.className = 'meal-slot-empty';
+      addMore.style.cssText = 'opacity:.6; font-size:12px; padding:6px 12px;';
+      addMore.innerHTML = `<span style="font-size:14px; font-weight:300">+</span> Add another item`;
+      addMore.onclick = () => {
+        document.getElementById('mealSlot').value = slot;
+        document.getElementById('mealInput').focus();
+      };
+      section.appendChild(addMore);
+    }
+
+    container.appendChild(section);
+  });
+
+  // Update calorie bar
+  updateSummary(entries);
+
+  // Update suggestions
+  renderHints();
+}
+
+function saveEdit(key, id) {
+  const nameEl = document.getElementById(`editName_${id}`);
+  const kcalEl = document.getElementById(`editKcal_${id}`);
+  const name = nameEl.value.trim();
+  const kcal = parseInt(kcalEl.value, 10) || 0;
+  if (!name) return;
+  const entry = (mealLog[key] || []).find(e => e.id === id);
+  if (entry) { entry.name = name; entry.kcal = kcal; }
+  savelog();
+  editingId = null;
+  renderDayPanel();
+  renderCalendar();
+}
+
+function cancelEdit() {
+  editingId = null;
+  renderDayPanel();
+}
+
+function removeEntry(event, key, id) {
+  event.stopPropagation();
+  if (!mealLog[key]) return;
+  mealLog[key] = mealLog[key].filter(e => e.id !== id);
+  savelog();
+  if (editingId === id) editingId = null;
+  renderDayPanel();
+  renderCalendar();
+}
+
+function updateSummary(entries) {
+  const total = entries.reduce((s, e) => s + (e.kcal || 0), 0);
+  const left  = Math.max(0, GOAL - total);
+  const pct   = Math.min(100, Math.round(total / GOAL * 100));
+  document.getElementById('daySummaryTotal').textContent = `${total} / ${GOAL} kcal`;
+  document.getElementById('daySummaryEaten').textContent = `${total} eaten`;
+  document.getElementById('daySummaryLeft').textContent  = total > GOAL ? `${total - GOAL} over goal` : `${left} remaining`;
+  const bar = document.getElementById('daySummaryBar');
+  bar.style.width = pct + '%';
+  bar.className = 'stat-bar-fill' + (pct > 100 ? ' over' : pct > 85 ? ' warn' : '');
+}
+
+// ── Smart suggestions: top 5 from history filtered by slot ──
+function getHistoryItems(slot) {
+  const freq = {};
+  const nameMap = {};
+  Object.values(mealLog).forEach(entries => {
+    entries.filter(e => e.slot === slot).forEach(e => {
+      const k = e.name.toLowerCase().trim();
+      freq[k] = (freq[k] || 0) + 1;
+      if (!nameMap[k]) nameMap[k] = e.name;
+    });
+  });
+  return Object.entries(freq)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([k]) => nameMap[k] || k);
+}
+
+function renderHints() {
+  const slot  = document.getElementById('mealSlot').value;
+  const items = getHistoryItems(slot);
+  const section = document.getElementById('hintsSection');
+  const chips   = document.getElementById('hintChips');
+  if (items.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  chips.innerHTML = '';
+  items.forEach(name => {
+    const chip = document.createElement('span');
+    chip.className = 'hint-chip';
+    chip.textContent = name;
+    chip.onclick = () => {
+      document.getElementById('mealInput').value = name;
+      document.getElementById('mealInput').focus();
+    };
+    chips.appendChild(chip);
+  });
+}
+
+// ── Calorie estimator ─────────────────────────────
+const KCAL_MAP = {
+  oatmeal:250, banana:90, honey:60, scrambled:180, egg:75, eggs:150, toast:80,
+  chicken:220, salad:80, grilled:0, soup:180, bowl:500, sushi:350,
+  salmon:280, yogurt:130, apple:80, almond:100, noodle:200, rice:200,
+  pizza:300, pasta:350, sandwich:350, wrap:400, taco:250, burger:500,
+  bread:130, cheese:110, milk:60, cereal:150, pancake:200, waffle:220,
+  orange:60, grape:60, strawberry:50, blueberry:55, mango:100,
+  broccoli:55, carrot:50, spinach:40, potato:160, fries:350,
+  beef:300, pork:280, turkey:180, shrimp:120, tuna:150,
+  coffee:5, tea:2, juice:120, smoothie:200, protein:150,
+};
+
+function estimateKcal(name) {
+  // First: check if the exact name exists in history (use that kcal)
+  const lower = name.toLowerCase().trim();
+  for (const entries of Object.values(mealLog)) {
+    for (const e of entries) {
+      if (e.name.toLowerCase().trim() === lower && e.kcal) return e.kcal;
+    }
+  }
+  // Otherwise: keyword-based estimate
+  const words = lower.split(/[\s,+&]+/);
+  let total = 0, matched = 0;
+  words.forEach(w => {
+    for (const [k, v] of Object.entries(KCAL_MAP)) {
+      if (w.includes(k) && v > 0) { total += v; matched++; break; }
+    }
+  });
+  return matched > 0 ? total : Math.floor(Math.random() * 200 + 150);
+}
+
+function addMeal() {
+  const input = document.getElementById('mealInput');
+  const name  = input.value.trim();
+  const slot  = document.getElementById('mealSlot').value;
+  if (!name || !selectedDate) return;
+  const key = dateKey(selectedDate);
+  if (!mealLog[key]) mealLog[key] = [];
+  const kcal = estimateKcal(name);
+  mealLog[key].push({ id: ++nextId, slot, name, kcal });
+  savelog();
+  input.value = '';
+  renderDayPanel();
+  renderCalendar();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.id === 'mealInput') addMeal();
+});
+
+// ── Water tracker ────────────────────────────────
+const WATER_CUPS = 8;
+
+function waterKey(date) {
+  // Per-date water key: dh_water_YYYY-MM-DD (today also updates dh_water for dashboard)
+  return 'dh_water_' + dateKey(date);
+}
+
+function getWaterFilled(date) {
+  try {
+    const n = parseInt(localStorage.getItem(waterKey(date)) || '0', 10);
+    return isNaN(n) ? 0 : n;
+  } catch(e) { return 0; }
+}
+
+function setWaterFilled(date, n) {
+  try {
+    localStorage.setItem(waterKey(date), String(n));
+    // Sync today's count to dh_water so the dashboard widget stays in sync
+    const t = new Date();
+    if (dateKey(date) === dateKey(t)) {
+      localStorage.setItem('dh_water', String(n));
+    }
+  } catch(e) {}
+}
+
+function renderWaterCups() {
+  if (!selectedDate) return;
+  const filled = getWaterFilled(selectedDate);
+  const wrap = document.getElementById('waterCupsCal');
+  wrap.innerHTML = '';
+  for (let i = 0; i < WATER_CUPS; i++) {
+    const cup = document.createElement('div');
+    cup.className = 'cup-cal' + (i < filled ? ' filled' : '');
+    cup.title = i < filled ? 'Click to un-log' : 'Log a glass';
+    cup.onclick = () => {
+      const newFilled = (i < filled) ? i : i + 1;
+      setWaterFilled(selectedDate, newFilled);
+      renderWaterCups();
+    };
+    wrap.appendChild(cup);
+  }
+  document.getElementById('waterCountLabel').textContent =
+    filled + ' of ' + WATER_CUPS + ' glasses today';
+}
+
+// ── Init ─────────────────────────────────────────
+viewYear  = today.getFullYear();
+viewMonth = today.getMonth();
+renderCalendar();
+selectDay(today);
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

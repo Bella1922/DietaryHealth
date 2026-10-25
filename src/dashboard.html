@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietaryHealth – Dashboard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    /* ── Dashboard-specific layout ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .dash-grid .card-full { grid-column: 1 / -1; }
+    @media (max-width: 600px) { .dash-grid { grid-template-columns: 1fr; } }
+
+    /* Summary stat tiles */
+    .stat-tile {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-tile-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-muted); }
+    .stat-tile-value { font-family: 'DM Serif Display', Georgia, serif; font-size: 36px; color: var(--fg); line-height: 1; }
+    .stat-tile-unit  { font-size: 14px; color: var(--fg-muted); }
+    .stat-tile-delta { font-size: 13px; font-weight: 600; }
+    .stat-tile-delta.up   { color: var(--danger); }
+    .stat-tile-delta.down { color: var(--accent); }
+
+    /* Macro ring chart (CSS-only donut) */
+    .macro-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .macro-item { text-align: center; }
+    .macro-ring {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      font-size: 15px; font-weight: 600; color: var(--fg);
+    }
+    .macro-label { font-size: 12px; color: var(--fg-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+    .macro-grams { font-size: 13px; color: var(--fg); }
+
+    /* Recent meals list */
+    .meal-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .meal-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .meal-icon {
+      width: 38px; height: 38px; border-radius: 8px;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .meal-info { flex: 1; min-width: 0; }
+    .meal-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .meal-meta { font-size: 12px; color: var(--fg-muted); }
+    .meal-cals { font-weight: 600; font-size: 14px; flex-shrink: 0; }
+
+    /* Greeting band */
+    .greeting { margin-bottom: 4px; color: var(--fg-muted); font-size: 14px; }
+    .greeting-name { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 5vw, 30px); font-weight: 400; color: var(--fg); margin: 0 0 4px; }
+    .greeting-date { font-size: 13px; color: var(--fg-muted); }
+
+    /* Quick-log button */
+    .quick-log-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px;
+      background: var(--accent); color: #fff;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      border: none; cursor: pointer; transition: background .15s;
+      margin-top: 16px;
+    }
+    .quick-log-btn:hover { background: var(--accent-dark); }
+
+    /* Water tracker */
+    .water-cups { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .cup {
+      width: 36px; height: 36px; border-radius: 6px;
+      border: 2px solid #3a8ec8;
+      background: #daeeff;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      position: relative;
+    }
+    .cup:hover { background: #bfdfff; }
+    .cup.filled { background: #5aace8; border-color: #3a8ec8; }
+    .cup.filled::after {
+      content: '';
+      position: absolute; bottom: 4px; left: 4px; right: 4px; top: 4px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.3);
+    }
+    .water-label { font-size: 13px; color: var(--fg-muted); margin-top: 6px; }
+
+    /* Insight card */
+    .insight {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .insight-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--accent-light); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .insight-text .insight-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .insight-text p { font-size: 13px; color: var(--fg-muted); margin: 0; }
+  </style>
+</head>
+<body>
+
+
+<div class="page">
+
+  <!-- Greeting -->
+  <p class="greeting" id="greetingTime">Good morning,</p>
+  <h1 class="greeting-name" id="greetingName">Welcome back.</h1>
+  <p class="greeting-date" id="todayDate"></p>
+
+  <button class="quick-log-btn" onclick="window.location.href='calendar.html'">
+    + Log a meal
+  </button>
+
+  <div class="dash-grid">
+
+    <!-- Calories today -->
+    <div class="card">
+      <div class="card-title">Calories Today</div>
+      <div class="stat-tile">
+        <div class="stat-tile-value">1,340 <span class="stat-tile-unit">/ 1,800 kcal</span></div>
+      </div>
+      <div class="stat-bar-wrap" style="margin-top:12px">
+        <div class="stat-bar-track">
+          <div class="stat-bar-fill" style="width:74%"></div>
+        </div>
+        <div class="stat-bar-labels">
+          <span>1,340 eaten</span><span>460 left</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Water intake -->
+    <div class="card">
+      <div class="card-title">Water</div>
+      <div class="water-cups" id="waterCups"></div>
+      <p class="water-label" id="waterLabel">5 of 8 glasses</p>
+    </div>
+
+    <!-- Macros -->
+    <div class="card card-full">
+      <div class="card-title">Macros</div>
+      <div class="macro-row">
+        <div class="macro-item">
+          <div class="macro-ring" style="background: conic-gradient(#5aaa82 0% 68%, var(--border) 68%)">68%</div>
+          <div class="macro-label">Protein</div>
+          <div class="macro-grams">82 / 120 g</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-ring" style="background: conic-gradient(#d4882a 0% 55%, var(--border) 55%)">55%</div>
+          <div class="macro-label">Carbs</div>
+          <div class="macro-grams">138 / 250 g</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-ring" style="background: conic-gradient(#5a8ecc 0% 40%, var(--border) 40%)">40%</div>
+          <div class="macro-label">Fat</div>
+          <div class="macro-grams">22 / 55 g</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent meals -->
+    <div class="card card-full">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
+        <div class="card-title" style="margin-bottom:0">Today's Meals</div>
+        <a href="calendar.html" style="font-size:13px; color:var(--fg-muted);">View all →</a>
+      </div>
+
+      <div class="meal-row">
+        <div class="meal-icon" style="font-size:11px;font-weight:700;">B</div>
+        <div class="meal-info">
+          <div class="meal-name">Oatmeal with banana &amp; honey</div>
+          <div class="meal-meta">Breakfast · 7:45 AM</div>
+        </div>
+        <div class="meal-cals">310 kcal</div>
+      </div>
+
+      <div class="meal-row">
+        <div class="meal-icon" style="font-size:11px;font-weight:700;">L</div>
+        <div class="meal-info">
+          <div class="meal-name">Grilled chicken salad</div>
+          <div class="meal-meta">Lunch · 12:30 PM</div>
+        </div>
+        <div class="meal-cals">480 kcal</div>
+      </div>
+
+      <div class="meal-row">
+        <div class="meal-icon" style="font-size:11px;font-weight:700;">S</div>
+        <div class="meal-info">
+          <div class="meal-name">Apple + almond butter</div>
+          <div class="meal-meta">Snack · 3:00 PM</div>
+        </div>
+        <div class="meal-cals">210 kcal</div>
+      </div>
+
+      <div class="meal-row" style="opacity:.45; cursor:pointer" onclick="window.location.href='calendar.html'">
+        <div class="meal-icon" style="background:var(--chip-bg); color:var(--fg-muted); font-size:18px; font-weight:300;">+</div>
+        <div class="meal-info">
+          <div class="meal-name" style="color:var(--fg-muted)">Log dinner…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight -->
+    <div class="card card-full">
+      <div class="card-title">Today's Insight</div>
+      <div class="insight">
+        <div class="insight-icon" style="font-size:13px; font-weight:700;">TIP</div>
+        <div class="insight-text">
+          <div class="insight-title">You're a little low on protein today</div>
+          <p>You've had 82 g so far, and your goal is 120 g. Adding a protein-rich dinner — like grilled salmon, eggs, or Greek yogurt — would help you hit your target.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Show today's date + time-based greeting
+  const d = new Date();
+  document.getElementById('todayDate').textContent = d.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+  const hour = d.getHours();
+  const timeGreeting = hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
+  document.getElementById('greetingTime').textContent = timeGreeting;
+
+  // Show logged-in user's name
+  try {
+    const u = JSON.parse(localStorage.getItem('dh_user') || '{}');
+    const name = u.firstName || u.username || '';
+    if (name) document.getElementById('greetingName').textContent = 'Welcome back, ' + name + '.';
+  } catch(e) {}
+
+  // Water tracker — reads/writes both dh_water (legacy) AND dh_water_YYYY-MM-DD (shared with calendar)
+  const CUPS = 8;
+  const todayKey = 'dh_water_' + d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+
+  let filled = 0;
+  try {
+    // Prefer the per-date key; fall back to legacy key
+    const perDay = localStorage.getItem(todayKey);
+    const legacy = localStorage.getItem('dh_water');
+    filled = parseInt(perDay !== null ? perDay : (legacy || '0'), 10) || 0;
+  } catch(e) {}
+
+  function renderCups() {
+    const wrap = document.getElementById('waterCups');
+    wrap.innerHTML = '';
+    for (let i = 0; i < CUPS; i++) {
+      const cup = document.createElement('div');
+      cup.className = 'cup' + (i < filled ? ' filled' : '');
+      cup.title = i < filled ? 'Click to un-log' : 'Click to log';
+      cup.onclick = () => {
+        filled = (i < filled) ? i : i + 1;
+        try {
+          localStorage.setItem(todayKey, String(filled));
+          localStorage.setItem('dh_water', String(filled)); // keep legacy in sync
+        } catch(e) {}
+        renderCups();
+      };
+      wrap.appendChild(cup);
+    }
+    document.getElementById('waterLabel').textContent = `${filled} of ${CUPS} glasses`;
+  }
+  renderCups();
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietaryHealth – Register</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <script>window.DH_NO_AUTH = true;</script>
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px max(20px, env(safe-area-inset-left, 0px));
+    }
+    .auth-box { width: 100%; max-width: 440px; }
+    .auth-logo {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--fg);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .auth-logo span { color: var(--accent); }
+    .auth-sub {
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .auth-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--fg-muted);
+      margin-top: 20px;
+    }
+    .show-pass-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--fg-muted);
+      font-size: 13px;
+      font-family: inherit;
+      padding: 0;
+    }
+    .pass-wrap { position: relative; }
+    .pass-wrap input { padding-right: 60px; }
+    .name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 400px) { .name-row { grid-template-columns: 1fr; } }
+    .strength-bar { height: 4px; border-radius: 99px; background: var(--border); margin-top: 8px; overflow: hidden; }
+    .strength-fill { height: 100%; border-radius: 99px; width: 0; transition: width .3s, background .3s; }
+    .strength-label { font-size: 12px; color: var(--fg-muted); margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-box">
+
+    <div class="auth-logo">Dietary<span>Health</span></div>
+    <p class="auth-sub">Create your free account to get started.</p>
+
+    <div class="card">
+      <div id="registerError" class="alert alert-danger" style="display:none"></div>
+
+      <div class="name-row">
+        <div class="field">
+          <label class="field-label" for="firstName">First name</label>
+          <input type="text" id="firstName" placeholder="Emma" autocomplete="given-name">
+          <div class="field-error" id="firstNameError">Required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="lastName">Last name</label>
+          <input type="text" id="lastName" placeholder="Smith" autocomplete="family-name">
+          <div class="field-error" id="lastNameError">Required.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        <div class="field-error" id="emailError">Please enter a valid email.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="username">Username</label>
+        <input type="text" id="username" placeholder="Choose a username" autocomplete="username">
+        <div class="field-error" id="usernameError">Please choose a username (letters, numbers, underscores).</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="password" placeholder="At least 8 characters" autocomplete="new-password"
+                 oninput="checkStrength(this.value)">
+          <button class="show-pass-btn" type="button" onclick="togglePass('password', this)">Show</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel"></div>
+        <div class="field-error" id="passwordError">Password must be at least 8 characters.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="confirm">Confirm password</label>
+        <div class="pass-wrap">
+          <input type="password" id="confirm" placeholder="Re-enter your password" autocomplete="new-password">
+          <button class="show-pass-btn" type="button" onclick="togglePass('confirm', this)">Show</button>
+        </div>
+        <div class="field-error" id="confirmError">Passwords don't match.</div>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="handleRegister()" style="margin-top:8px">Create account</button>
+    </div>
+
+    <p class="auth-footer">
+      Already have an account? <a href="login.html">Log in</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.textContent = isHidden ? 'Hide' : 'Show';
+  }
+
+  function checkStrength(val) {
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!val) { fill.style.width = '0'; label.textContent = ''; return; }
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = [
+      { pct: '20%', color: 'var(--danger)', text: 'Very weak' },
+      { pct: '40%', color: '#d4882a', text: 'Weak' },
+      { pct: '60%', color: '#c4ab2a', text: 'Fair' },
+      { pct: '80%', color: 'var(--accent)', text: 'Strong' },
+      { pct: '100%', color: 'var(--accent)', text: 'Very strong' },
+    ];
+    const lvl = levels[Math.min(score - 1, 4)] || levels[0];
+    fill.style.width = lvl.pct;
+    fill.style.background = lvl.color;
+    label.textContent = lvl.text;
+    label.style.color = lvl.color;
+  }
+
+  function clearErrors() {
+    ['firstNameError','lastNameError','emailError','usernameError','passwordError','confirmError']
+      .forEach(id => document.getElementById(id).classList.remove('visible'));
+    document.getElementById('registerError').style.display = 'none';
+  }
+
+  function handleRegister() {
+    clearErrors();
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const username  = document.getElementById('username').value.trim();
+    const password  = document.getElementById('password').value;
+    const confirm   = document.getElementById('confirm').value;
+    let valid = true;
+
+    if (!firstName) { document.getElementById('firstNameError').classList.add('visible'); valid = false; }
+    if (!lastName)  { document.getElementById('lastNameError').classList.add('visible'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('emailError').classList.add('visible'); valid = false;
+    }
+    if (!username || !/^[A-Za-z0-9_]+$/.test(username)) {
+      document.getElementById('usernameError').classList.add('visible'); valid = false;
+    }
+    if (!password || password.length < 8) {
+      document.getElementById('passwordError').classList.add('visible'); valid = false;
+    }
+    if (password !== confirm) {
+      document.getElementById('confirmError').classList.add('visible'); valid = false;
+    }
+    if (!valid) return;
+
+    // Check username isn't already taken
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('dh_users') || '[]'); } catch(e) {}
+    if (users.find(u => u.username === username)) {
+      document.getElementById('usernameError').textContent = 'That username is already taken.';
+      document.getElementById('usernameError').classList.add('visible');
+      return;
+    }
+    if (users.find(u => u.email === email)) {
+      document.getElementById('emailError').textContent = 'An account with that email already exists.';
+      document.getElementById('emailError').classList.add('visible');
+      return;
+    }
+
+    // Save new user to the users list
+    // NOTE: storing password in localStorage is only for frontend demo —
+    // in production, passwords are hashed server-side and never stored in the browser.
+    const newUser = { username, firstName, lastName, email, password,
+                      createdAt: new Date().toISOString() };
+    users.push(newUser);
+    try { localStorage.setItem('dh_users', JSON.stringify(users)); } catch(e) {}
+
+    // Set as active session user (without password)
+    const sessionUser = { username, firstName, lastName, email };
+    try { localStorage.setItem('dh_user', JSON.stringify(sessionUser)); } catch(e) {}
+
+    // TODO: replace with real API call to backend
+    // fetch('/api/register', { method: 'POST', headers: {'Content-Type':'application/json'},
+    //   body: JSON.stringify({ firstName, lastName, email, username, password }) })
+
+    const btn = document.querySelector('.btn-primary');
+    btn.textContent = 'Creating account…';
+    btn.disabled = true;
+    setTimeout(() => {
+      window.location.href = 'questionnaire.html';
+    }, 600);
+  }
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

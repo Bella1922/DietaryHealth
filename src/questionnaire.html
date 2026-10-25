@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietaryHealth – Questionnaire</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <script>window.DH_NO_AUTH = true;</script>
+  <style>
+    /* ── Progress bar ── */
+    .progress-bar-wrap {
+      position: sticky; top: 60px; z-index: 10;  /* 60px = nav height */
+      background: var(--bg);
+      padding: 12px max(20px, env(safe-area-inset-left, 0px));
+      border-bottom: 1px solid var(--border);
+    }
+    .progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .progress-label { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+    .progress-count { font-size: 13px; color: var(--fg-muted); }
+    .progress-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--accent); border-radius: 99px; transition: width .4s ease; }
+
+    /* ── Dot step indicator ── */
+    .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 8px; }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); transition: background .3s, transform .3s;
+    }
+    .step-dot.active { background: var(--accent); transform: scale(1.25); }
+    .step-dot.done   { background: var(--accent); opacity: .45; }
+
+    /* ── Form container ── */
+    .form-wrap { max-width: 620px; margin: 0 auto; padding-top: 36px; }
+
+    /* ── Step screens ── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* ── Part header ── */
+    .part-header { margin-bottom: 28px; }
+    .part-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .part-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(22px, 5vw, 30px); font-weight: 400; line-height: 1.2;
+      color: var(--fg); text-wrap: balance; margin: 0 0 8px;
+    }
+    .part-desc { color: var(--fg-muted); font-size: 14px; }
+
+    /* ── Section card ── */
+    .section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .field-group { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── "Other" goal textbox reveal ── */
+    .goal-other-wrap { display: none; margin-top: 12px; }
+    .goal-other-wrap.visible { display: block; }
+
+    /* ── Nav buttons ── */
+    .nav-row {
+      display: flex; gap: 12px; justify-content: space-between;
+      margin-top: 32px; flex-wrap: wrap; align-items: center;
+    }
+    .nav-row-right { margin-left: auto; display: flex; gap: 12px; }
+    .btn-skip {
+      background: none; color: var(--fg-muted); border: none;
+      font-size: 13px; cursor: pointer; padding: 8px 0; font-family: inherit;
+    }
+    .btn-skip:hover { color: var(--fg); }
+
+    /* ── Summary ── */
+    .summary-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      margin-bottom: 12px; box-shadow: var(--shadow);
+    }
+    .summary-section h3 {
+      font-size: 13px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--accent); margin: 0 0 12px;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between; gap: 16px;
+      padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-key { color: var(--fg-muted); flex: 0 0 140px; }
+    .summary-val { color: var(--fg); text-align: right; flex: 1; }
+
+    .submit-banner {
+      background: var(--accent-light); border: 1.5px solid var(--accent);
+      border-radius: var(--radius); padding: 20px 24px; text-align: center; margin-top: 24px;
+    }
+    .submit-banner p { margin: 0 0 16px; font-size: 14px; color: var(--fg); }
+
+    /* ── Checkbox / radio option lists ── */
+    .check-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+    .check-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 14px; border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      cursor: pointer; font-size: 14px;
+      transition: border-color .15s, background .15s;
+      user-select: none;
+    }
+    .check-option:hover { border-color: var(--accent); }
+    .check-option input[type="checkbox"],
+    .check-option input[type="radio"] {
+      width: 17px; height: 17px; margin: 0; flex-shrink: 0;
+      accent-color: var(--accent); cursor: pointer;
+    }
+    .check-option:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    /* ── Input row (side-by-side) ── */
+    .input-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+    .input-row > * { flex: 1; min-width: 100px; }
+
+    @media (max-width: 480px) {
+      .section { padding: 18px 16px; }
+      .input-row { flex-direction: column; gap: 8px; }
+      .input-row > * { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Progress bar (sticks below the nav) ── -->
+<div class="progress-bar-wrap">
+  <div class="step-dots" id="stepDots"></div>
+  <div class="progress-meta">
+    <span class="progress-label" id="progressLabel">Part 1 — About You</span>
+    <span class="progress-count" id="progressCount"></span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+</div>
+
+<div class="page">
+<div class="form-wrap" id="formWrap">
+
+  <!-- ══════════════════════════════════
+       STEP 1 — Basic info
+  ══════════════════════════════════ -->
+  <div class="step active" id="step-0">
+    <div class="part-header">
+      <div class="part-eyebrow">Part 1 · Step 1</div>
+      <h1 class="part-title">Let's start with the basics</h1>
+      <p class="part-desc">Age, gender, height, and weight — we use these to calculate your daily targets.</p>
+    </div>
+    <div class="section">
+      <div class="field-group">
+
+        <div>
+          <label class="field-label" for="age">Age</label>
+          <input type="number" id="age" min="1" max="120" placeholder="e.g. 24">
+        </div>
+
+        <div>
+          <label class="field-label">Gender</label>
+          <div class="check-list">
+            <label class="check-option">
+              <input type="radio" name="gender" value="female" onchange="selections['gender']='female'">
+              Female
+            </label>
+            <label class="check-option">
+              <input type="radio" name="gender" value="male" onchange="selections['gender']='male'">
+              Male
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label">Height</label>
+          <div class="unit-toggle">
+            <button class="unit-btn active" id="heightImperial" onclick="switchHeightUnit('imperial')">ft / in</button>
+            <button class="unit-btn"        id="heightMetric"   onclick="switchHeightUnit('metric')">cm</button>
+          </div>
+          <div id="heightImperialFields" class="input-row">
+            <div>
+              <select id="heightFt">
+                <option value="">ft</option>
+                <option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
+              </select>
+            </div>
+            <div>
+              <select id="heightIn">
+                <option value="">in</option>
+                <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+                <option>10</option><option>11</option>
+              </select>
+            </div>
+          </div>
+          <div id="heightMetricFields" style="display:none">
+            <input type="number" id="heightCm" min="50" max="280" placeholder="e.g. 170">
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label">Weight</label>
+          <div class="unit-toggle">
+            <button class="unit-btn active" id="weightLbs" onclick="switchWeightUnit('lbs')">lbs</button>
+            <button class="unit-btn"        id="weightKg"  onclick="switchWeightUnit('kg')">kg</button>
+          </div>
+          <div id="weightLbsField">
+            <input type="number" id="weightInLbs" min="1" max="1500" placeholder="e.g. 145">
+          </div>
+          <div id="weightKgField" style="display:none">
+            <input type="number" id="weightInKg" min="1" max="700" placeholder="e.g. 66">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-row"><div class="nav-row-right">
+      <button class="btn btn-primary" onclick="goToStep(1)">Next →</button>
+    </div></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       STEP 2 — Dietary restrictions
+  ══════════════════════════════════ -->
+  <div class="step" id="step-1">
+    <div class="part-header">
+      <div class="part-eyebrow">Part 1 · Step 2</div>
+      <h1 class="part-title">Any dietary restrictions?</h1>
+      <p class="part-desc">Select all that apply. You can change these at any time from your profile.</p>
+    </div>
+    <div class="section">
+      <div class="check-list">
+        <label class="check-option"><input type="checkbox" name="diet" value="vegan">       Vegan</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="vegetarian">  Vegetarian</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="pescatarian"> Pescatarian</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="halal">       Halal</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="kosher">      Kosher</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="gluten-free"> Gluten-free</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="dairy-free">  Dairy-free</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="none">        None / No restrictions</label>
+      </div>
+      <div style="margin-top:16px">
+        <label class="field-label" for="dietOther">Anything else?</label>
+        <p class="field-hint">e.g. "I avoid red meat" or "low-sodium diet"</p>
+        <textarea id="dietOther" placeholder="Type here…"></textarea>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goToStep(0)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       STEP 3 — Allergies
+  ══════════════════════════════════ -->
+  <div class="step" id="step-2">
+    <div class="part-header">
+      <div class="part-eyebrow">Part 1 · Step 3</div>
+      <h1 class="part-title">Food allergies</h1>
+      <p class="part-desc">We use singular food names so the system can catch related products — selecting "Peanut" also flags peanut butter.</p>
+    </div>
+    <div class="section">
+      <div class="check-list">
+        <label class="check-option"><input type="checkbox" name="allergy" value="peanut">    Peanut</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="tree nut">  Tree nut</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="milk">      Milk</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="egg">       Egg</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="wheat">     Wheat</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="soy">       Soy</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="fish">      Fish</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="shellfish"> Shellfish</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="sesame">    Sesame</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="apple">     Apple</label>
+        <label class="check-option"><input type="checkbox" name="allergy" value="none">      None / No allergies</label>
+      </div>
+      <div style="margin-top:16px">
+        <label class="field-label" for="allergyOther">Other allergies</label>
+        <textarea id="allergyOther" placeholder="e.g. mango, celery, mustard…"></textarea>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       STEP 4 — Health concerns + food prefs
+  ══════════════════════════════════ -->
+  <div class="step" id="step-3">
+    <div class="part-header">
+      <div class="part-eyebrow">Part 1 · Step 4</div>
+      <h1 class="part-title">Health &amp; food preferences</h1>
+      <p class="part-desc">Help us tailor your recommendations.</p>
+    </div>
+    <div class="section">
+      <div class="field-group">
+        <div>
+          <label class="field-label" for="healthConcerns">Health concerns</label>
+          <p class="field-hint">Any conditions that affect what you should eat.</p>
+          <textarea id="healthConcerns" placeholder="e.g. high blood pressure, managing cholesterol…"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="foodsLike">Foods you enjoy</label>
+          <p class="field-hint">We'll suggest similar options in your plan.</p>
+          <textarea id="foodsLike" placeholder="e.g. grilled chicken, rice, apples, yogurt…"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="foodsDislike">Foods you want to avoid</label>
+          <p class="field-hint">We'll keep these out of your recommendations.</p>
+          <textarea id="foodsDislike" placeholder="e.g. Brussels sprouts, liver, spicy food…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       STEP 5 — Goals (Part 2, optional)
+  ══════════════════════════════════ -->
+  <div class="step" id="step-4">
+    <div class="part-header">
+      <div class="part-eyebrow">Part 2 <span class="optional-badge">Optional</span></div>
+      <h1 class="part-title">What are you working toward?</h1>
+      <p class="part-desc">Skip this section if you'd like — we'll still build your plan from Part 1.</p>
+    </div>
+
+    <!-- Primary goal -->
+    <div class="section">
+      <label class="field-label">Your primary goal</label>
+      <p class="field-hint">Pick the one that fits best. Tap again to deselect.</p>
+      <div class="check-list">
+        <label class="check-option"><input type="radio" name="goal" value="lose-weight"      onchange="selections['goal']=this.value; toggleOtherGoal()"> Lose weight</label>
+        <label class="check-option"><input type="radio" name="goal" value="gain-muscle"      onchange="selections['goal']=this.value; toggleOtherGoal()"> Build muscle</label>
+        <label class="check-option"><input type="radio" name="goal" value="eat-healthier"    onchange="selections['goal']=this.value; toggleOtherGoal()"> Eat healthier</label>
+        <label class="check-option"><input type="radio" name="goal" value="maintain"         onchange="selections['goal']=this.value; toggleOtherGoal()"> Maintain weight</label>
+        <label class="check-option"><input type="radio" name="goal" value="manage-condition" onchange="selections['goal']=this.value; toggleOtherGoal()"> Manage a condition</label>
+        <label class="check-option"><input type="radio" name="goal" value="other"            onchange="selections['goal']=this.value; toggleOtherGoal()"> Other</label>
+      </div>
+      <div class="goal-other-wrap" id="goalOtherWrap">
+        <label class="field-label" for="goalOtherText" style="margin-top:4px">Describe your goal</label>
+        <textarea id="goalOtherText" placeholder="e.g. I want more energy throughout the day…"></textarea>
+      </div>
+    </div>
+
+    <!-- Target weight -->
+    <div class="section">
+      <label class="field-label">Target weight <span class="optional-badge">Optional</span></label>
+      <p class="field-hint">Leave blank if you don't have a specific number in mind.</p>
+      <div class="unit-toggle">
+        <button class="unit-btn active" id="targetLbs" onclick="switchTargetUnit('lbs')">lbs</button>
+        <button class="unit-btn"        id="targetKg"  onclick="switchTargetUnit('kg')">kg</button>
+      </div>
+      <div id="targetLbsField"><input type="number" id="targetInLbs" min="1" max="1500" placeholder="e.g. 130"></div>
+      <div id="targetKgField" style="display:none"><input type="number" id="targetInKg" min="1" max="700" placeholder="e.g. 59"></div>
+    </div>
+
+    <!-- Activity level -->
+    <div class="section">
+      <label class="field-label">Activity level <span class="optional-badge">Optional</span></label>
+      <p class="field-hint">This helps us fine-tune your daily calorie target.</p>
+      <div class="check-list">
+        <label class="check-option"><input type="radio" name="activity" value="mostly-sitting" onchange="selections['activity']=this.value"> Mostly sitting — a desk job or mostly at home</label>
+        <label class="check-option"><input type="radio" name="activity" value="light"          onchange="selections['activity']=this.value"> Lightly active — light exercise 1–3 days/week</label>
+        <label class="check-option"><input type="radio" name="activity" value="moderate"       onchange="selections['activity']=this.value"> Moderately active — exercise 3–5 days/week</label>
+        <label class="check-option"><input type="radio" name="activity" value="very"           onchange="selections['activity']=this.value"> Very active — intense exercise 6–7 days/week</label>
+      </div>
+    </div>
+
+    <!-- Extra notes -->
+    <div class="section">
+      <label class="field-label">Anything else? <span class="optional-badge">Optional</span></label>
+      <textarea id="extraNotes" placeholder="e.g. I want to lower my sodium, I'm training for a 5K…"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goToStep(3)">← Back</button>
+      <div style="display:flex;gap:12px;align-items:center">
+        <button class="btn-skip" onclick="goToStep(5)">Skip Part 2</button>
+        <button class="btn btn-primary" onclick="goToStep(5)">Review answers →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       STEP 6 — Summary
+  ══════════════════════════════════ -->
+  <div class="step" id="step-5">
+    <div class="part-header">
+      <div class="part-eyebrow">Almost done</div>
+      <h1 class="part-title">Review your profile</h1>
+      <p class="part-desc">Everything look right? Go back to edit anything.</p>
+    </div>
+    <div id="summaryContent"></div>
+    <div class="submit-banner">
+      <p>Once you submit, we'll generate your personalized diet plan. You can always update it later.</p>
+      <button class="btn btn-primary" onclick="submitForm()">Generate my diet plan</button>
+    </div>
+    <div class="nav-row" style="justify-content:flex-start; margin-top:16px;">
+      <button class="btn btn-ghost" onclick="goToStep(4)">← Go back and edit</button>
+    </div>
+  </div>
+
+</div><!-- /form-wrap -->
+</div><!-- /page -->
+
+<script>
+  const TOTAL_STEPS = 6;
+  const selections  = {};
+  let   currentStep = 0;
+
+  // ── Build dot indicators ──────────────────────────────────────
+  function buildDots() {
+    const c = document.getElementById('stepDots');
+    c.innerHTML = '';
+    for (let i = 0; i < TOTAL_STEPS; i++) {
+      const d = document.createElement('div');
+      d.className = 'step-dot';
+      d.id = 'dot-' + i;
+      c.appendChild(d);
+    }
+  }
+
+  // ── Navigate ──────────────────────────────────────────────────
+  function goToStep(n) {
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep = n;
+    document.getElementById('step-' + n).classList.add('active');
+    updateProgress();
+    if (n === TOTAL_STEPS - 1) buildSummary();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Progress bar + dots ───────────────────────────────────────
+  function updateProgress() {
+    const pct = Math.round((currentStep / (TOTAL_STEPS - 1)) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    const isSummary = currentStep === TOTAL_STEPS - 1;
+    const isPart2   = currentStep === 4;
+    document.getElementById('progressLabel').textContent =
+      isSummary ? 'Review' : isPart2 ? 'Part 2 — Your Goals' : 'Part 1 — About You';
+    document.getElementById('progressCount').textContent =
+      isSummary ? '' : 'Step ' + (currentStep + 1) + ' of ' + (TOTAL_STEPS - 1);
+
+    for (let i = 0; i < TOTAL_STEPS; i++) {
+      const d = document.getElementById('dot-' + i);
+      d.classList.remove('active', 'done');
+      if (i === currentStep) d.classList.add('active');
+      else if (i < currentStep) d.classList.add('done');
+    }
+  }
+
+  // ── Chip selection ────────────────────────────────────────────
+  function selectChip(el, group, multi) {
+    if (multi) {
+      el.classList.toggle('active');
+      if (!selections[group]) selections[group] = [];
+      const v = el.dataset.value;
+      const idx = selections[group].indexOf(v);
+      if (idx === -1) selections[group].push(v);
+      else selections[group].splice(idx, 1);
+    } else {
+      const wasActive = el.classList.contains('active');
+      document.querySelectorAll('.chip[data-group="' + group + '"]')
+        .forEach(c => c.classList.remove('active'));
+      if (!wasActive) {
+        el.classList.add('active');
+        selections[group] = el.dataset.value;
+      } else {
+        delete selections[group];
+      }
+    }
+  }
+
+  // ── "Other" goal reveal ───────────────────────────────────────
+  function toggleOtherGoal() {
+    const isOther = selections['goal'] === 'other';
+    document.getElementById('goalOtherWrap').classList.toggle('visible', isOther);
+  }
+
+  // ── Unit toggles ──────────────────────────────────────────────
+  function switchHeightUnit(unit) {
+    document.getElementById('heightImperial').classList.toggle('active', unit === 'imperial');
+    document.getElementById('heightMetric').classList.toggle('active', unit === 'metric');
+    document.getElementById('heightImperialFields').style.display = unit === 'imperial' ? 'flex' : 'none';
+    document.getElementById('heightMetricFields').style.display   = unit === 'metric'   ? 'block' : 'none';
+  }
+  function switchWeightUnit(unit) {
+    document.getElementById('weightLbs').classList.toggle('active', unit === 'lbs');
+    document.getElementById('weightKg').classList.toggle('active',  unit === 'kg');
+    document.getElementById('weightLbsField').style.display = unit === 'lbs' ? 'block' : 'none';
+    document.getElementById('weightKgField').style.display  = unit === 'kg'  ? 'block' : 'none';
+  }
+  function switchTargetUnit(unit) {
+    document.getElementById('targetLbs').classList.toggle('active', unit === 'lbs');
+    document.getElementById('targetKg').classList.toggle('active',  unit === 'kg');
+    document.getElementById('targetLbsField').style.display = unit === 'lbs' ? 'block' : 'none';
+    document.getElementById('targetKgField').style.display  = unit === 'kg'  ? 'block' : 'none';
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────
+  function getHeightStr() {
+    if (document.getElementById('heightImperial').classList.contains('active')) {
+      const ft = document.getElementById('heightFt').value;
+      const inches = document.getElementById('heightIn').value;
+      return (ft || inches) ? (ft||'?') + ' ft ' + (inches||'?') + ' in' : '—';
+    }
+    const cm = document.getElementById('heightCm').value;
+    return cm ? cm + ' cm' : '—';
+  }
+  function getWeightStr() {
+    if (document.getElementById('weightLbs').classList.contains('active')) {
+      const v = document.getElementById('weightInLbs').value;
+      return v ? v + ' lbs' : '—';
+    }
+    const v = document.getElementById('weightInKg').value;
+    return v ? v + ' kg' : '—';
+  }
+  function getTargetStr() {
+    if (document.getElementById('targetLbs').classList.contains('active')) {
+      const v = document.getElementById('targetInLbs').value;
+      return v ? v + ' lbs' : 'Not set';
+    }
+    const v = document.getElementById('targetInKg').value;
+    return v ? v + ' kg' : 'Not set';
+  }
+  function val(id) { return document.getElementById(id).value.trim() || '—'; }
+
+  // Read checked checkboxes for a group
+  function getChecked(name) {
+    const checked = Array.from(document.querySelectorAll('input[name="' + name + '"]:checked'))
+      .map(el => el.value);
+    return checked.length ? checked.join(', ') : '—';
+  }
+  // Read selected radio for a group
+  function getRadio(name) {
+    const el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '—';
+  }
+  function goalStr() {
+    const g = getRadio('goal');
+    if (g === 'other') {
+      const txt = document.getElementById('goalOtherText').value.trim();
+      return txt ? 'Other: ' + txt : 'Other';
+    }
+    return g;
+  }
+
+  // ── Build summary ─────────────────────────────────────────────
+  function buildSummary() {
+    const dietExtra    = document.getElementById('dietOther').value.trim();
+    const allergyExtra = document.getElementById('allergyOther').value.trim();
+    document.getElementById('summaryContent').innerHTML =
+      '<div class="summary-section">' +
+        '<h3>About you</h3>' +
+        '<div class="summary-row"><span class="summary-key">Age</span><span class="summary-val">' + (val('age') !== '—' ? val('age') + ' yrs' : '—') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Gender</span><span class="summary-val">' + getRadio('gender') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Height</span><span class="summary-val">' + getHeightStr() + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Weight</span><span class="summary-val">' + getWeightStr() + '</span></div>' +
+      '</div>' +
+      '<div class="summary-section">' +
+        '<h3>Food profile</h3>' +
+        '<div class="summary-row"><span class="summary-key">Restrictions</span><span class="summary-val">' + getChecked('diet') + (dietExtra ? ' · ' + dietExtra : '') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Allergies</span><span class="summary-val">'    + getChecked('allergy') + (allergyExtra ? ' · ' + allergyExtra : '') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Health concerns</span><span class="summary-val">' + val('healthConcerns') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Foods I enjoy</span><span class="summary-val">'   + val('foodsLike') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Foods to avoid</span><span class="summary-val">'  + val('foodsDislike') + '</span></div>' +
+      '</div>' +
+      '<div class="summary-section">' +
+        '<h3>Goals (optional)</h3>' +
+        '<div class="summary-row"><span class="summary-key">Primary goal</span><span class="summary-val">'    + goalStr() + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Target weight</span><span class="summary-val">'   + getTargetStr() + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Activity level</span><span class="summary-val">'  + getRadio('activity') + '</span></div>' +
+        '<div class="summary-row"><span class="summary-key">Notes</span><span class="summary-val">'           + val('extraNotes') + '</span></div>' +
+      '</div>';
+  }
+
+  // ── Submit ────────────────────────────────────────────────────
+  function submitForm() {
+    // TODO: replace with fetch('/api/questionnaire', { method:'POST', body: JSON.stringify(collectData()) })
+    // Save answers to localStorage for now
+    try {
+      const profile = {
+        age: val('age'), gender: getRadio('gender'),
+        height: getHeightStr(), weight: getWeightStr(),
+        restrictions: getChecked('diet'), allergies: getChecked('allergy'),
+        healthConcerns: val('healthConcerns'), foodsLike: val('foodsLike'), foodsDislike: val('foodsDislike'),
+        goal: goalStr(), targetWeight: getTargetStr(),
+        activityLevel: getRadio('activity'), notes: val('extraNotes')
+      };
+      const user = JSON.parse(localStorage.getItem('dh_user') || '{}');
+      user.profile = profile;
+      localStorage.setItem('dh_user', JSON.stringify(user));
+    } catch(e) {}
+
+    const btn = document.querySelector('.submit-banner .btn-primary');
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+
+    setTimeout(function () {
+      document.getElementById('step-5').innerHTML =
+        '<div class="part-header">' +
+          '<div class="part-eyebrow">All set</div>' +
+          '<h1 class="part-title">Your profile is saved.</h1>' +
+          '<p class="part-desc">Head to your dashboard to start logging meals.</p>' +
+        '</div>' +
+        '<div class="submit-banner" style="text-align:left">' +
+          '<p style="font-size:15px;font-weight:600;margin-bottom:8px">What happens next</p>' +
+          '<p style="margin-bottom:8px">• Your daily calorie and nutrient targets are set.</p>' +
+          '<p style="margin-bottom:8px">• Your calendar is ready — start logging today\'s meals.</p>' +
+          '<p style="margin-bottom:16px">• You can update your profile at any time from the nav menu.</p>' +
+          '<a href="dashboard.html" class="btn btn-primary">Go to Dashboard →</a>' +
+        '</div>';
+      document.getElementById('progressLabel').textContent = 'Complete';
+      document.getElementById('progressFill').style.width = '100%';
+      document.querySelectorAll('.step-dot').forEach(function(d) { d.classList.remove('active'); d.classList.add('done'); });
+    }, 800);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  buildDots();
+  updateProgress();
+</script>
+<script src="../js/nav.js"></script>
+</body>
+</html>
