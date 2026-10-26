@@ -164,6 +164,13 @@
 </head>
 <body>
 
+<!-- ── Nav ── -->
+<nav style="position:sticky;top:0;z-index:100;height:60px;background:#2e7d52;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:flex;align-items:center;padding:0 max(24px,env(safe-area-inset-left,0px));gap:4px;">
+  <a href="dashboard.html" style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;color:#fff;text-decoration:none;margin-right:16px;">Dietary<span style="color:rgba(255,255,255,0.7)">Health</span></a>
+  <a href="calendar.html" style="padding:7px 14px;border-radius:7px;background:rgba(255,255,255,0.22);color:#fff;font-size:14px;font-weight:600;text-decoration:none;">Calendar</a>
+  <span style="flex:1"></span>
+  <button onclick="dhLogout()" style="padding:7px 16px;border-radius:7px;background:rgba(255,220,220,0.15);color:rgba(255,220,220,0.9);font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:inherit;" onmouseover="this.style.background='rgba(255,255,255,0.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,220,220,0.15)';this.style.color='rgba(255,220,220,0.9)'">Log out</button>
+</nav>
 
 <div class="page">
   <div class="page-eyebrow">Nutrition Log</div>

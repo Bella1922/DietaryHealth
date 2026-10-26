@@ -1,3 +1,9 @@
+/* ============================================================
+   DietaryHealth — main.css
+   Shared design tokens, layout, and components
+   Used by: login, register, questionnaire, dashboard, calendar
+   ============================================================ */
+
 /* ── Google Fonts (also in each HTML <head>) ── */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
 
