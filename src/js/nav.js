@@ -33,7 +33,7 @@
   // Global logout
   window.dhLogout = function () {
     try { localStorage.removeItem('dh_user'); } catch (e) {}
-    window.location.href = '../pages/login.html';
+    window.location.href = 'login.html';
   };
 
 })();
