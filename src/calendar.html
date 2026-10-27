@@ -227,6 +227,7 @@
           </div>
           <div class="add-meal-row">
             <input type="text" id="mealInput" placeholder="What did you eat?">
+            <input type="number" id="mealKcal" placeholder="Calories" min="0" max="9999" style="width:110px;flex-shrink:0;">
             <button class="btn btn-primary" onclick="addMeal()">Add</button>
           </div>
           <div id="hintsSection" style="display:none">
@@ -264,37 +265,27 @@ const today = new Date();
 const MONTHS = ['January','February','March','April','May','June',
                 'July','August','September','October','November','December'];
 
+// ── Version flag: bump this string any time seed data changes ──
+const DATA_VERSION = 'v2-no-seed';
+if (localStorage.getItem('dh_dataVersion') !== DATA_VERSION) {
+  // Wipe old demo data and start fresh
+  try { localStorage.removeItem('dh_mealLog'); } catch(e) {}
+  try { localStorage.removeItem('dh_water'); } catch(e) {}
+  // Clear any per-date water keys
+  try {
+    Object.keys(localStorage).filter(k => k.startsWith('dh_water_') || k.startsWith('dh_meals_'))
+      .forEach(k => localStorage.removeItem(k));
+  } catch(e) {}
+  try { localStorage.setItem('dh_dataVersion', DATA_VERSION); } catch(e) {}
+}
+
 let mealLog = {};
 try { const s = localStorage.getItem('dh_mealLog'); if (s) mealLog = JSON.parse(s); } catch(e){}
 
-// Seed sample data
-const todayKey = dateKey(today);
-if (!mealLog[todayKey]) {
-  mealLog[todayKey] = [
-    { id: 1, slot: 'Breakfast', name: 'Oatmeal with banana and honey', kcal: 310 },
-    { id: 2, slot: 'Lunch',     name: 'Grilled chicken salad',         kcal: 480 },
-    { id: 3, slot: 'Snack',     name: 'Apple with almond butter',      kcal: 210 },
-  ];
-}
-const y = today.getFullYear(), m = today.getMonth();
-function seedDay(dy, entries) {
-  const d = new Date(y, m, today.getDate() + dy);
-  const k = dateKey(d);
-  if (!mealLog[k]) mealLog[k] = entries;
-}
-seedDay(-1, [
-  { id:10, slot:'Breakfast', name:'Scrambled eggs on toast', kcal:380 },
-  { id:11, slot:'Lunch',     name:'Chicken noodle soup',     kcal:420 },
-  { id:12, slot:'Dinner',    name:'Roast chicken and vegetables', kcal:560 },
-]);
-seedDay(-3, [
-  { id:20, slot:'Lunch',  name:'Burrito bowl', kcal:650 },
-  { id:21, slot:'Dinner', name:'Salmon with rice', kcal:490 },
-]);
+let nextId = Date.now(); // unique IDs for new entries
 
 function dateKey(d) { return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
 function savelog() { try { localStorage.setItem('dh_mealLog', JSON.stringify(mealLog)); } catch(e){} }
-let nextId = Date.now();
 
 // ── Calendar ─────────────────────────────────────
 function changeMonth(delta) {
@@ -559,22 +550,33 @@ function estimateKcal(name) {
 }
 
 function addMeal() {
-  const input = document.getElementById('mealInput');
-  const name  = input.value.trim();
-  const slot  = document.getElementById('mealSlot').value;
+  const input    = document.getElementById('mealInput');
+  const kcalInp  = document.getElementById('mealKcal');
+  const name     = input.value.trim();
+  const slot     = document.getElementById('mealSlot').value;
   if (!name || !selectedDate) return;
   const key = dateKey(selectedDate);
   if (!mealLog[key]) mealLog[key] = [];
-  const kcal = estimateKcal(name);
-  mealLog[key].push({ id: ++nextId, slot, name, kcal });
+  const kcal = kcalInp.value !== '' ? (parseInt(kcalInp.value, 10) || 0) : 0;
+  const now  = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  mealLog[key].push({ id: ++nextId, slot, name, kcal, time });
   savelog();
-  input.value = '';
+  input.value   = '';
+  kcalInp.value = '';
   renderDayPanel();
   renderCalendar();
+  // Also write to dh_meals_YYYY-MM-DD so dashboard can read it
+  try {
+    const mealDashKey = 'dh_meals_' + key;
+    const existing = JSON.parse(localStorage.getItem(mealDashKey) || '[]');
+    existing.push({ name, type: slot, calories: kcal, time });
+    localStorage.setItem(mealDashKey, JSON.stringify(existing));
+  } catch(e) {}
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.activeElement.id === 'mealInput') addMeal();
+  if (e.key === 'Enter' && (document.activeElement.id === 'mealInput' || document.activeElement.id === 'mealKcal')) addMeal();
 });
 
 // ── Water tracker ────────────────────────────────

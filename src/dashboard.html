@@ -146,15 +146,15 @@
     <!-- Calories today -->
     <div class="card">
       <div class="card-title">Calories Today</div>
-      <div class="stat-tile">
-        <div class="stat-tile-value">1,340 <span class="stat-tile-unit">/ 1,800 kcal</span></div>
+      <div class="stat-tile" id="calTile">
+        <div class="stat-tile-value" id="calValue" style="font-size:28px;color:var(--fg-muted)">0 <span class="stat-tile-unit">kcal</span></div>
       </div>
       <div class="stat-bar-wrap" style="margin-top:12px">
         <div class="stat-bar-track">
-          <div class="stat-bar-fill" style="width:74%"></div>
+          <div class="stat-bar-fill" id="calBar" style="width:0%"></div>
         </div>
         <div class="stat-bar-labels">
-          <span>1,340 eaten</span><span>460 left</span>
+          <span id="calEaten">0 eaten</span><span id="calLeft">Log a meal to start</span>
         </div>
       </div>
     </div>
@@ -163,89 +163,60 @@
     <div class="card">
       <div class="card-title">Water</div>
       <div class="water-cups" id="waterCups"></div>
-      <p class="water-label" id="waterLabel">5 of 8 glasses</p>
+      <p class="water-label" id="waterLabel">0 of 8 glasses</p>
     </div>
 
     <!-- Macros -->
     <div class="card card-full">
       <div class="card-title">Macros</div>
-      <div class="macro-row">
+      <div id="macroEmpty" style="text-align:center;padding:24px 0;color:var(--fg-muted);font-size:14px;">
+        No meals logged yet — macros will appear here once you start tracking.
+        <br><a href="calendar.html" style="color:var(--accent);font-weight:600;margin-top:8px;display:inline-block;">Log your first meal →</a>
+      </div>
+      <div class="macro-row" id="macroRow" style="display:none">
         <div class="macro-item">
-          <div class="macro-ring" style="background: conic-gradient(#5aaa82 0% 68%, var(--border) 68%)">68%</div>
+          <div class="macro-ring" id="ringProtein" style="background: conic-gradient(#5aaa82 0% 0%, var(--border) 0%)">0%</div>
           <div class="macro-label">Protein</div>
-          <div class="macro-grams">82 / 120 g</div>
+          <div class="macro-grams" id="gramsProtein">0 g</div>
         </div>
         <div class="macro-item">
-          <div class="macro-ring" style="background: conic-gradient(#d4882a 0% 55%, var(--border) 55%)">55%</div>
+          <div class="macro-ring" id="ringCarbs" style="background: conic-gradient(#d4882a 0% 0%, var(--border) 0%)">0%</div>
           <div class="macro-label">Carbs</div>
-          <div class="macro-grams">138 / 250 g</div>
+          <div class="macro-grams" id="gramsCarbs">0 g</div>
         </div>
         <div class="macro-item">
-          <div class="macro-ring" style="background: conic-gradient(#5a8ecc 0% 40%, var(--border) 40%)">40%</div>
+          <div class="macro-ring" id="ringFat" style="background: conic-gradient(#5a8ecc 0% 0%, var(--border) 0%)">0%</div>
           <div class="macro-label">Fat</div>
-          <div class="macro-grams">22 / 55 g</div>
+          <div class="macro-grams" id="gramsFat">0 g</div>
         </div>
       </div>
     </div>
 
-    <!-- Recent meals -->
+    <!-- Today's meals -->
     <div class="card card-full">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
         <div class="card-title" style="margin-bottom:0">Today's Meals</div>
-        <a href="calendar.html" style="font-size:13px; color:var(--fg-muted);">View all →</a>
+        <a href="calendar.html" style="font-size:13px; color:var(--fg-muted);">View calendar →</a>
       </div>
-
-      <div class="meal-row">
-        <div class="meal-icon" style="font-size:11px;font-weight:700;">B</div>
-        <div class="meal-info">
-          <div class="meal-name">Oatmeal with banana &amp; honey</div>
-          <div class="meal-meta">Breakfast · 7:45 AM</div>
-        </div>
-        <div class="meal-cals">310 kcal</div>
-      </div>
-
-      <div class="meal-row">
-        <div class="meal-icon" style="font-size:11px;font-weight:700;">L</div>
-        <div class="meal-info">
-          <div class="meal-name">Grilled chicken salad</div>
-          <div class="meal-meta">Lunch · 12:30 PM</div>
-        </div>
-        <div class="meal-cals">480 kcal</div>
-      </div>
-
-      <div class="meal-row">
-        <div class="meal-icon" style="font-size:11px;font-weight:700;">S</div>
-        <div class="meal-info">
-          <div class="meal-name">Apple + almond butter</div>
-          <div class="meal-meta">Snack · 3:00 PM</div>
-        </div>
-        <div class="meal-cals">210 kcal</div>
-      </div>
-
-      <div class="meal-row" style="opacity:.45; cursor:pointer" onclick="window.location.href='calendar.html'">
-        <div class="meal-icon" style="background:var(--chip-bg); color:var(--fg-muted); font-size:18px; font-weight:300;">+</div>
-        <div class="meal-info">
-          <div class="meal-name" style="color:var(--fg-muted)">Log dinner…</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI Insight -->
-    <div class="card card-full">
-      <div class="card-title">Today's Insight</div>
-      <div class="insight">
-        <div class="insight-icon" style="font-size:13px; font-weight:700;">TIP</div>
-        <div class="insight-text">
-          <div class="insight-title">You're a little low on protein today</div>
-          <p>You've had 82 g so far, and your goal is 120 g. Adding a protein-rich dinner — like grilled salmon, eggs, or Greek yogurt — would help you hit your target.</p>
-        </div>
-      </div>
+      <div id="mealList"></div>
     </div>
 
   </div>
 </div>
 
 <script>
+  // Clear old demo data if version flag hasn't been set
+  const DATA_VERSION = 'v2-no-seed';
+  if (localStorage.getItem('dh_dataVersion') !== DATA_VERSION) {
+    try { localStorage.removeItem('dh_mealLog'); } catch(e) {}
+    try { localStorage.removeItem('dh_water'); } catch(e) {}
+    try {
+      Object.keys(localStorage).filter(k => k.startsWith('dh_water_') || k.startsWith('dh_meals_'))
+        .forEach(k => localStorage.removeItem(k));
+    } catch(e) {}
+    try { localStorage.setItem('dh_dataVersion', DATA_VERSION); } catch(e) {}
+  }
+
   // Show today's date + time-based greeting
   const d = new Date();
   document.getElementById('todayDate').textContent = d.toLocaleDateString('en-US', {
@@ -296,6 +267,51 @@
     document.getElementById('waterLabel').textContent = `${filled} of ${CUPS} glasses`;
   }
   renderCups();
+
+  // ── Load today's meals from localStorage and render ──
+  const dateStr = d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+  const mealKey = 'dh_meals_' + dateStr;
+
+  let meals = [];
+  try { meals = JSON.parse(localStorage.getItem(mealKey) || '[]'); } catch(e) {}
+
+  const mealList = document.getElementById('mealList');
+  const typeLabel = { breakfast:'B', lunch:'L', dinner:'D', snack:'S' };
+
+  if (meals.length === 0) {
+    mealList.innerHTML = `
+      <div style="text-align:center;padding:24px 0;color:var(--fg-muted);font-size:14px;">
+        Nothing logged today yet.
+        <br><a href="calendar.html" style="color:var(--accent);font-weight:600;margin-top:8px;display:inline-block;">+ Log your first meal</a>
+      </div>`;
+  } else {
+    let totalCals = 0;
+    meals.forEach(m => {
+      totalCals += (m.calories || 0);
+      const row = document.createElement('div');
+      row.className = 'meal-row';
+      const lbl = typeLabel[(m.type||'').toLowerCase()] || '?';
+      row.innerHTML = `
+        <div class="meal-icon" style="font-size:11px;font-weight:700;">${lbl}</div>
+        <div class="meal-info">
+          <div class="meal-name">${m.name || 'Meal'}</div>
+          <div class="meal-meta">${m.type || ''} · ${m.time || ''}</div>
+        </div>
+        <div class="meal-cals">${m.calories ? m.calories + ' kcal' : '—'}</div>`;
+      mealList.appendChild(row);
+    });
+
+    // Update calorie tile
+    document.getElementById('calValue').innerHTML =
+      `${totalCals.toLocaleString()} <span class="stat-tile-unit">kcal</span>`;
+    document.getElementById('calValue').style.color = 'var(--fg)';
+    document.getElementById('calEaten').textContent = totalCals.toLocaleString() + ' eaten';
+    document.getElementById('calLeft').textContent = '';
+    const pct = Math.min(100, Math.round(totalCals / 2000 * 100));
+    document.getElementById('calBar').style.width = pct + '%';
+  }
 </script>
 <script src="js/nav.js"></script>
 </body>
