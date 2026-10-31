@@ -1,0 +1,453 @@
+﻿Food Name,Category,Subcategory,Serving Size,Serving Weight (g),Calories,Protein (g),Total Fat (g),Saturated Fat (g),Total Carbs (g),Dietary Fiber (g),Sugars (g),Sodium (mg),Healthy
+Great Value Whole Milk,Dairy & Eggs,Milk,1 cup (240 mL),244,150,8,8,5,12,0,12,120,TRUE
+Great Value Large White Eggs,Dairy & Eggs,Eggs,1 large egg,50,70,6,5,1.5,0,0,0,70,TRUE
+Great Value Unsalted Sweet Cream Butter,Dairy & Eggs,Butter,1 tbsp (14g),14,100,0,11,7,0,0,0,0,FALSE
+Great Value Whole Wheat Bread,Bakery & Bread,Sliced Bread,1 slice (38g),38,100,4,1.5,0,19,3,3,140,TRUE
+Great Value Boneless Skinless Chicken Breasts,Meat & Seafood,Poultry,4 oz (112g),112,110,23,1.5,0.5,0,0,0,220,TRUE
+Great Value 80/20 Lean Ground Beef Chuck,Meat & Seafood,Beef,4 oz (112g),112,280,19,22,9,0,0,0,75,FALSE
+Marketside Organic Baby Spinach,Produce,Salad Greens,2 cups (85g),85,20,2,0,0,3,2,0,65,TRUE
+Great Value Long Grain White Rice,Pantry,Rice & Grains,1/4 cup dry (45g),45,160,3,0,0,36,0,0,0,FALSE
+Great Value Creamy Peanut Butter,Pantry,Spreads & Jams,2 tbsp (32g),32,190,7,16,3,7,2,3,140,TRUE
+Great Value Honey Nut Hoops Cereal,Breakfast & Cereal,Cold Cereal,1 cup (39g),39,150,3,1.5,0,32,3,12,190,FALSE
+Great Value Chunk Light Tuna in Water,Pantry,Canned Seafood,1/2 cup (113g),113,90,20,1,0,0,0,0,360,TRUE
+Marketside Fresh Bananas,Produce,Fresh Fruit,1 medium (118g),118,105,1.3,0.4,0.1,27,3.1,14.4,1,TRUE
+Marketside Hass Avocado,Produce,Fresh Fruit,1/5 medium (30g),30,50,1,4.5,0.5,3,2,0,0,TRUE
+Great Value Traditional Pasta Sauce,Pantry,Pasta & Sauce,1/2 cup (125g),125,60,1.5,1.5,0,10,2,6,430,FALSE
+Great Value Shredded Sharp Cheddar Cheese,Dairy & Eggs,Cheese,1/4 cup (28g),28,110,6,9,5,1,0,0,170,FALSE
+Great Value Original Potato Chips,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,1.5,15,1,1,170,FALSE
+Great Value Frozen Wild Caught Pink Salmon,Meat & Seafood,Seafood,1 fillet (112g),112,130,22,4.5,0.5,0,0,0,75,TRUE
+Great Value Organic Whole Greek Yogurt Plain,Dairy & Eggs,Yogurt,3/4 cup (170g),170,160,16,7,4.5,6,0,6,65,TRUE
+Great Value Purified Drinking Water,Beverages,Water,1 bottle (500 mL),500,0,0,0,0,0,0,0,0,FALSE
+Great Value 100% Apple Juice,Beverages,Juice,8 fl oz (240 mL),240,110,0,0,0,28,0,26,15,FALSE
+Great Value Original Orange Juice,Beverages,Juice,8 fl oz (240 mL),240,110,2,0,0,26,0,22,0,FALSE
+Coca-Cola Original Soda,Beverages,Soft Drinks,1 can (355 mL),355,140,0,0,0,39,0,39,45,FALSE
+Great Value Zero Calorie Cola,Beverages,Soft Drinks,1 can (355 mL),355,0,0,0,0,0,0,0,35,FALSE
+Great Value Organic Whole Black Beans,Pantry,Canned Goods,1/2 cup (130g),130,110,7,0.5,0,20,6,1,380,TRUE
+Great Value Quick Oats,Breakfast & Cereal,Oatmeal,1/2 cup dry (40g),40,150,5,2.5,0.5,27,4,1,0,TRUE
+Great Value 2% Reduced Fat Milk,Dairy & Eggs,Milk,1 cup (240 mL),244,120,8,5,3,12,0,12,125,TRUE
+Great Value Fat Free Skim Milk,Dairy & Eggs,Milk,1 cup (240 mL),245,80,8,0,0,12,0,12,125,TRUE
+Great Value Unsweetened Almond Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,30,1,2.5,0,1,1,0,170,TRUE
+Great Value Low-Fat Cottage Cheese,Dairy & Eggs,Cheese,1/2 cup (113g),113,90,12,2.5,1.5,5,0,4,330,TRUE
+Great Value Mozzarella String Cheese,Dairy & Eggs,Cheese,1 stick (28g),28,80,7,6,3.5,1,0,0,200,FALSE
+Great Value Vanilla Low-Fat Yogurt,Dairy & Eggs,Yogurt,3/4 cup (170g),170,150,7,2,1.5,26,0,24,100,FALSE
+Great Value 100% Whole Wheat Hamburger Buns,Bakery & Bread,Buns & Rolls,1 bun (50g),50,120,5,1.5,0,22,3,3,200,TRUE
+Great Value White Sandwich Bread,Bakery & Bread,Sliced Bread,1 slice (28g),28,70,2,1,0,13,0,2,130,FALSE
+Great Value Plain Bagels,Bakery & Bread,Bagels,1 bagel (95g),95,270,10,1.5,0,53,2,5,430,FALSE
+Great Value Flour Tortillas,Bakery & Bread,Tortillas,1 tortilla (49g),49,140,4,3.5,1.5,24,1,1,350,FALSE
+Great Value Boneless Skinless Chicken Thighs,Meat & Seafood,Poultry,4 oz (112g),112,140,18,7,2,0,0,0,90,TRUE
+Great Value Lean Ground Turkey 93/7,Meat & Seafood,Poultry,4 oz (112g),112,170,21,9,2.5,0,0,0,80,TRUE
+Great Value Hickory Smoked Bacon,Meat & Seafood,Pork,2 slices (16g),16,80,5,7,2.5,0,0,0,260,FALSE
+Great Value Boneless Pork Loin Chops,Meat & Seafood,Pork,4 oz (112g),112,140,23,5,1.5,0,0,0,60,TRUE
+Great Value Beef Hot Dogs,Meat & Seafood,Processed Meat,1 frank (50g),50,150,5,13,5,2,0,1,480,FALSE
+Great Value Frozen Raw Shrimp,Meat & Seafood,Seafood,3 oz (84g),84,70,16,0.5,0,0,0,0,190,TRUE
+Great Value Tilapia Fillets,Meat & Seafood,Seafood,4 oz (112g),112,110,23,2,0.5,0,0,0,50,TRUE
+Marketside Broccoli Florets,Produce,Fresh Vegetables,1 cup (85g),85,30,2,0,0,6,2,2,30,TRUE
+Marketside Baby Carrots,Produce,Fresh Vegetables,8 carrots (85g),85,35,1,0,0,8,2,5,70,TRUE
+Marketside Russet Potatoes,Produce,Fresh Vegetables,1 medium (148g),148,110,3,0,0,26,2,1,10,TRUE
+Marketside Fresh Gala Apples,Produce,Fresh Fruit,1 medium (182g),182,95,0.5,0.3,0,25,4.4,19,2,TRUE
+Marketside Strawberries,Produce,Fresh Fruit,8 berries (147g),147,45,1,0.5,0,11,3,7,2,TRUE
+Marketside Fresh Blueberries,Produce,Fresh Fruit,1 cup (148g),148,85,1.1,0.5,0,21,3.6,15,1,TRUE
+Marketside Roma Tomatoes,Produce,Fresh Vegetables,1 medium (91g),91,20,1,0,0,4,1,3,5,TRUE
+Marketside Romaine Lettuce Hearts,Produce,Salad Greens,2 cups (85g),85,15,1,0,0,3,2,1,10,TRUE
+Great Value Whole Kernel Sweet Corn,Pantry,Canned Goods,1/2 cup (125g),125,60,2,0.5,0,13,2,4,230,TRUE
+Great Value Cut Green Beans,Pantry,Canned Goods,1/2 cup (121g),121,20,1,0,0,4,2,1,330,TRUE
+Great Value Chicken Noodle Soup,Pantry,Soups,1 cup (240g),240,60,3,2,0.5,8,1,1,860,FALSE
+Great Value Spaghetti Pasta,Pantry,Pasta & Sauce,2 oz dry (56g),56,200,7,1,0,42,2,2,0,FALSE
+Great Value Whole Wheat Penne,Pantry,Pasta & Sauce,2 oz dry (56g),56,190,8,1.5,0,39,6,2,0,TRUE
+Great Value Brown Rice,Pantry,Rice & Grains,1/4 cup dry (45g),45,160,4,1.5,0,34,2,0,0,TRUE
+Great Value Dry Roasted Peanuts,Snacks,Nuts & Seeds,1 oz (28g),28,170,7,14,2,6,2,1,120,TRUE
+Great Value Raw Almonds,Snacks,Nuts & Seeds,1 oz (28g),28,170,6,15,1,6,4,1,0,TRUE
+Great Value Extra Virgin Olive Oil,Pantry,Oils & Vinegars,1 tbsp (14g),14,120,0,14,2,0,0,0,0,TRUE
+Great Value Pure Vegetable Oil,Pantry,Oils & Vinegars,1 tbsp (14g),14,120,0,14,1,0,0,0,0,FALSE
+Great Value Strawberry Preserves,Pantry,Spreads & Jams,1 tbsp (20g),20,50,0,0,0,13,0,12,0,FALSE
+Great Value Pure Honey,Pantry,Sweeteners,1 tbsp (21g),21,60,0,0,0,17,0,17,0,FALSE
+Great Value Ketchup,Pantry,Condiments,1 tbsp (17g),17,20,0,0,0,5,0,4,160,FALSE
+Great Value Mayonnaise,Pantry,Condiments,1 tbsp (14g),14,90,0,10,1.5,0,0,0,90,FALSE
+Great Value Frosted Corn Flakes Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (29g),29,110,1,0,0,26,1,11,140,FALSE
+Great Value Instant Oatmeal Maple & Brown Sugar,Breakfast & Cereal,Oatmeal,1 packet (43g),43,160,3,2,0.5,32,3,12,230,FALSE
+Great Value Granola Bars Oats & Honey,Snacks,Bars,1 bar (24g),24,100,2,3,0.5,17,1,6,85,FALSE
+Great Value Butter Microwave Popcorn,Snacks,Popcorn,3 Tbsp kernels (33g),33,170,3,10,3,18,3,0,310,FALSE
+Great Value Saltine Crackers,Snacks,Crackers,5 crackers (16g),16,70,1,1.5,0,12,0,0,150,FALSE
+Great Value Chocolate Chip Cookies,Snacks,Cookies,3 cookies (32g),32,150,2,7,3,21,1,11,100,FALSE
+Great Value Frozen Cheese Pizza,Frozen,Frozen Meals,1/3 pizza (113g),113,300,13,11,5,36,2,5,640,FALSE
+Great Value Frozen Cauliflower Rice,Frozen,Frozen Vegetables,1 cup (85g),85,25,2,0,0,5,2,2,25,TRUE
+Great Value Frozen Mixed Berries,Frozen,Frozen Fruit,1 cup (140g),140,60,1,0.5,0,15,3,11,0,TRUE
+Great Value Vanilla Ice Cream,Frozen,Ice Cream,2/3 cup (88g),88,170,3,9,5,19,0,17,45,FALSE
+Great Value Lemonade,Beverages,Juice,8 fl oz (240 mL),240,110,0,0,0,29,0,27,10,FALSE
+Great Value Plain Nonfat Greek Yogurt,Dairy & Eggs,Yogurt,3/4 cup (170g),170,100,17,0,0,6,0,5,65,TRUE
+Great Value Heavy Whipping Cream,Dairy & Eggs,Cream,1 tbsp (15g),15,50,0,5,3.5,0,0,0,5,FALSE
+Great Value Cream Cheese Spread,Dairy & Eggs,Cheese,2 tbsp (28g),28,90,2,9,5,1,0,1,90,FALSE
+Great Value Grated Parmesan Cheese,Dairy & Eggs,Cheese,1 tbsp (5g),5,20,2,1.5,1,0,0,0,85,FALSE
+Great Value Unsweetened Soy Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,80,7,4,0.5,4,2,1,90,TRUE
+Great Value Cinnamon Raisin Bread,Bakery & Bread,Sliced Bread,1 slice (38g),38,110,3,1.5,0,22,1,6,125,FALSE
+Great Value Blueberry Muffins,Bakery & Bread,Muffins,1 muffin (95g),95,340,4,15,2.5,48,1,27,310,FALSE
+Great Value Corn Tortillas,Bakery & Bread,Tortillas,2 tortillas (52g),52,110,3,1.5,0,22,3,0,15,TRUE
+Great Value Hawaiian Rolls,Bakery & Bread,Buns & Rolls,2 rolls (56g),56,170,5,3,1,31,1,9,210,FALSE
+Great Value Ribeye Steak,Meat & Seafood,Beef,4 oz (112g),112,290,22,22,9,0,0,0,65,FALSE
+Great Value Lean Ground Beef 93/7,Meat & Seafood,Beef,4 oz (112g),112,170,23,8,3.5,0,0,0,75,TRUE
+Great Value Italian Sausage Links,Meat & Seafood,Pork,1 link (85g),85,230,12,19,7,3,0,1,570,FALSE
+Great Value Sliced Deli Turkey Breast,Meat & Seafood,Deli Meat,2 oz (56g),56,50,10,0.5,0,1,0,1,410,TRUE
+Great Value Sliced Deli Ham,Meat & Seafood,Deli Meat,2 oz (56g),56,60,9,2,0.5,1,0,1,480,FALSE
+Great Value Chicken Nuggets Breaded,Frozen,Frozen Meals,5 pieces (90g),90,230,12,14,2.5,13,1,0,420,FALSE
+Great Value Atlantic Salmon Fillets Fresh,Meat & Seafood,Seafood,4 oz (112g),112,230,25,14,3,0,0,0,70,TRUE
+Marketside Fresh Cucumbers,Produce,Fresh Vegetables,1/2 medium (150g),150,20,1,0,0,4,1,2,5,TRUE
+Marketside Red Bell Peppers,Produce,Fresh Vegetables,1 medium (119g),119,30,1,0,0,7,2,5,5,TRUE
+Marketside Yellow Onions,Produce,Fresh Vegetables,1/2 medium (110g),110,45,1,0,0,11,2,5,5,TRUE
+Marketside Sweet Potatoes,Produce,Fresh Vegetables,1 medium (130g),130,110,2,0,0,26,4,5,70,TRUE
+Marketside Fresh Cauliflower,Produce,Fresh Vegetables,1 cup (107g),107,25,2,0,0,5,2,2,30,TRUE
+Marketside Navel Oranges,Produce,Fresh Fruit,1 medium (140g),140,70,1,0,0,18,3,14,0,TRUE
+Marketside Seedless Red Grapes,Produce,Fresh Fruit,1 cup (151g),151,100,1,0,0,27,1,23,3,FALSE
+Marketside Fresh Pineapple Chunks,Produce,Fresh Fruit,1 cup (165g),165,80,1,0,0,22,2,16,2,TRUE
+Marketside Fresh Mushrooms Whole White,Produce,Fresh Vegetables,5 medium (84g),84,20,3,0,0,3,1,1,5,TRUE
+Marketside Garlic Bulbs,Produce,Fresh Vegetables,1 clove (3g),3,5,0,0,0,1,0,0,0,TRUE
+Great Value Chickpeas Garbanzo Beans,Pantry,Canned Goods,1/2 cup (130g),130,120,6,2,0,20,6,2,300,TRUE
+Great Value Diced Tomatoes,Pantry,Canned Goods,1/2 cup (121g),121,25,1,0,0,5,1,3,200,TRUE
+Great Value Tomato Soup,Pantry,Soups,1/2 cup (126g),126,90,2,0,0,20,1,12,480,FALSE
+Great Value Mac & Cheese Dinner,Pantry,Boxed Meals,1 cup prepared (70g dry),70,260,10,3,1.5,48,2,6,570,FALSE
+Great Value Instant Mashed Potatoes,Pantry,Boxed Meals,1/3 cup dry (28g),28,100,2,0,0,22,1,1,320,FALSE
+Great Value Quinoa,Pantry,Rice & Grains,1/4 cup dry (45g),45,170,6,2.5,0,30,3,0,0,TRUE
+Great Value Ranch Dressing,Pantry,Condiments,2 tbsp (30g),30,130,0,14,2,1,0,1,260,FALSE
+Great Value Yellow Mustard,Pantry,Condiments,1 tsp (5g),5,0,0,0,0,0,0,0,55,TRUE
+Great Value Soy Sauce,Pantry,Condiments,1 tbsp (15 mL),15,10,1,0,0,1,0,0,920,FALSE
+Great Value Granulated Sugar,Pantry,Sweeteners,1 tsp (4g),4,15,0,0,0,4,0,4,0,FALSE
+Great Value All-Purpose Flour,Pantry,Baking,1/4 cup (30g),30,110,3,0,0,23,1,0,0,FALSE
+Great Value Chocolate Hazelnut Spread,Pantry,Spreads & Jams,2 tbsp (37g),37,200,2,12,3.5,23,1,21,15,FALSE
+Great Value Roasted Salted Cashews,Snacks,Nuts & Seeds,1 oz (28g),28,160,5,13,2.5,9,1,1,90,TRUE
+Great Value Sunflower Seeds,Snacks,Nuts & Seeds,1/4 cup (30g),30,170,6,15,1.5,6,3,1,150,TRUE
+Great Value Tortilla Chips,Snacks,Chips & Crisps,1 oz (28g),28,140,2,7,1,18,1,0,115,FALSE
+Great Value Pretzel Twists,Snacks,Pretzels,1 oz (28g),28,110,3,1,0,23,1,1,350,FALSE
+Great Value Chocolate Candy Bar,Snacks,Candy,1 bar (43g),43,230,3,13,8,26,1,24,35,FALSE
+Great Value Fruit Snacks,Snacks,Candy,1 pouch (25g),25,90,0,0,0,21,0,12,35,FALSE
+Great Value Raisin Bran Cereal,Breakfast & Cereal,Cold Cereal,1 cup (59g),59,190,5,1,0,45,7,18,220,FALSE
+Great Value Frozen Waffles,Breakfast & Cereal,Frozen Breakfast,2 waffles (70g),70,180,4,6,1.5,29,1,4,360,FALSE
+Great Value Frozen French Fries,Frozen,Frozen Vegetables,3 oz (84g),84,120,2,4,0.5,20,2,0,300,FALSE
+Great Value Frozen Spinach Chopped,Frozen,Frozen Vegetables,1/2 cup (85g),85,20,3,0,0,3,2,0,50,TRUE
+Great Value Hummus Classic,Dairy & Eggs,Dips & Spreads,2 tbsp (28g),28,70,2,5,0.5,4,1,0,115,TRUE
+Great Value Sweetened Iced Tea,Beverages,Tea,8 fl oz (240 mL),240,80,0,0,0,21,0,20,10,FALSE
+Great Value Sour Cream,Dairy & Eggs,Cream,2 tbsp (30g),30,60,1,5,3,1,0,1,15,FALSE
+Great Value Half & Half,Dairy & Eggs,Cream,2 tbsp (30g),30,40,1,3.5,2,1,0,1,15,FALSE
+Great Value Liquid Egg Whites,Dairy & Eggs,Eggs,3 tbsp (46g),46,25,5,0,0,0,0,0,80,TRUE
+Great Value Swiss Cheese Slices,Dairy & Eggs,Cheese,1 slice (21g),21,80,5,6,3.5,0,0,0,50,FALSE
+Great Value Pepper Jack Cheese Slices,Dairy & Eggs,Cheese,1 slice (21g),21,80,5,6,3.5,0,0,0,170,FALSE
+Great Value Oat Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,120,3,5,0.5,16,2,7,100,FALSE
+Great Value Chocolate Milk,Dairy & Eggs,Milk,1 cup (240 mL),240,160,8,2.5,1.5,26,1,25,150,FALSE
+Great Value French Vanilla Coffee Creamer,Dairy & Eggs,Cream,1 tbsp (15 mL),15,35,0,1.5,0,5,0,5,5,FALSE
+Great Value English Muffins,Bakery & Bread,Buns & Rolls,1 muffin (57g),57,120,5,1,0,25,2,2,200,FALSE
+Great Value Whole Wheat Pita Bread,Bakery & Bread,Pita & Flatbread,1 pita (64g),64,170,6,1.5,0,35,5,1,340,TRUE
+Great Value Glazed Donuts,Bakery & Bread,Donuts & Pastries,1 donut (50g),50,210,2,11,5,25,0,12,170,FALSE
+Great Value Butter Croissants,Bakery & Bread,Donuts & Pastries,1 croissant (57g),57,230,5,12,7,26,1,5,260,FALSE
+Great Value Texas Toast Garlic Bread,Bakery & Bread,Sliced Bread,1 slice (43g),43,150,3,7,1.5,18,1,1,230,FALSE
+Great Value Boneless Beef Sirloin Steak,Meat & Seafood,Beef,4 oz (112g),112,150,24,5,2,0,0,0,55,TRUE
+Great Value Chicken Wings,Meat & Seafood,Poultry,4 oz (112g),112,240,22,16,4.5,0,0,0,100,FALSE
+Great Value Chicken Drumsticks,Meat & Seafood,Poultry,4 oz (112g),112,160,21,8,2,0,0,0,100,TRUE
+Great Value Breakfast Pork Sausage Links,Meat & Seafood,Pork,2 links (52g),52,180,8,16,6,1,0,0,400,FALSE
+Great Value Pepperoni Slices,Meat & Seafood,Deli Meat,1 oz (28g),28,140,6,13,5,1,0,0,480,FALSE
+Great Value Canned Chicken Breast,Meat & Seafood,Canned Meat,2.5 oz (56g),56,70,12,1.5,0.5,0,0,0,330,TRUE
+Great Value Sardines in Olive Oil,Meat & Seafood,Canned Seafood,1 can (92g),92,190,22,11,2.5,0,0,0,280,TRUE
+Great Value Breaded Fish Sticks,Meat & Seafood,Seafood,4 sticks (88g),88,220,10,10,1.5,22,1,1,400,FALSE
+Great Value Frozen Cod Fillets,Meat & Seafood,Seafood,4 oz (112g),112,90,20,0.5,0,0,0,0,70,TRUE
+Marketside Fresh Asparagus,Produce,Fresh Vegetables,5 spears (85g),85,20,2,0,0,4,2,2,5,TRUE
+Marketside Zucchini,Produce,Fresh Vegetables,1 cup sliced (124g),124,20,1,0,0,4,1,3,10,TRUE
+Marketside Celery Stalks,Produce,Fresh Vegetables,2 stalks (80g),80,10,0,0,0,2,1,1,80,TRUE
+Marketside Green Cabbage,Produce,Fresh Vegetables,1 cup shredded (89g),89,25,1,0,0,5,2,3,15,TRUE
+Marketside Fresh Kale,Produce,Salad Greens,2 cups (67g),67,35,3,0.5,0,6,2,0,30,TRUE
+Marketside Fresh Lemons,Produce,Fresh Fruit,1 lemon (58g),58,15,0,0,0,5,2,1,0,TRUE
+Marketside Seedless Watermelon,Produce,Fresh Fruit,1 cup diced (152g),152,45,1,0,0,11,1,9,2,TRUE
+Marketside Fresh Cantaloupe,Produce,Fresh Fruit,1 cup cubed (160g),160,55,1,0,0,13,1,12,25,TRUE
+Marketside Fresh Peaches,Produce,Fresh Fruit,1 medium (150g),150,60,1.4,0.4,0,15,2.3,13,0,TRUE
+Marketside Fresh Mango,Produce,Fresh Fruit,1 cup sliced (165g),165,100,1,0.6,0.1,25,2.6,23,2,TRUE
+Marketside Bartlett Pears,Produce,Fresh Fruit,1 medium (178g),178,100,0.6,0.2,0,27,5.5,17,2,TRUE
+Great Value Dry Green Lentils,Pantry,Dried Beans & Legumes,1/4 cup dry (48g),48,170,13,0.5,0,29,11,1,0,TRUE
+Great Value Canned Pinto Beans,Pantry,Canned Goods,1/2 cup (130g),130,110,7,0.5,0,19,7,1,340,TRUE
+Great Value Traditional Refried Beans,Pantry,Canned Goods,1/2 cup (130g),130,110,6,1.5,0.5,18,5,1,440,FALSE
+Great Value Beef Broth,Pantry,Soups,1 cup (240 mL),240,15,3,0,0,0,0,0,860,FALSE
+Great Value Low Sodium Chicken Broth,Pantry,Soups,1 cup (240 mL),240,10,1,0,0,1,0,0,140,TRUE
+Great Value Peaches in 100% Juice,Pantry,Canned Goods,1/2 cup (126g),126,60,1,0,0,15,1,13,10,FALSE
+Great Value Unsweetened Applesauce,Pantry,Canned Goods,1/2 cup (122g),122,50,0,0,0,13,1,11,0,TRUE
+Great Value Original Pancake Syrup,Pantry,Sweeteners,1/4 cup (60 mL),60,210,0,0,0,52,0,30,85,FALSE
+Great Value Complete Pancake Mix,Pantry,Baking,1/3 cup (40g),40,140,3,1,0,28,1,5,380,FALSE
+Great Value Dill Pickle Spears,Pantry,Condiments,1 spear (28g),28,5,0,0,0,1,0,0,270,FALSE
+Great Value Medium Salsa,Pantry,Condiments,2 tbsp (32g),32,10,0,0,0,2,0,1,190,TRUE
+Great Value Original BBQ Sauce,Pantry,Condiments,2 tbsp (36g),36,70,0,0,0,17,0,14,290,FALSE
+Great Value Hot Sauce,Pantry,Condiments,1 tsp (5g),5,0,0,0,0,0,0,0,100,TRUE
+Great Value Apple Cider Vinegar,Pantry,Oils & Vinegars,1 tbsp (15 mL),15,0,0,0,0,0,0,0,0,TRUE
+Great Value Alfredo Sauce,Pantry,Pasta & Sauce,1/4 cup (62g),62,110,2,9,5,4,0,1,410,FALSE
+Great Value Classic Trail Mix,Snacks,Nuts & Seeds,1/4 cup (38g),38,180,5,11,2,17,2,9,70,FALSE
+Great Value Original Beef Jerky,Snacks,Jerky,1 oz (28g),28,80,13,1,0,6,0,6,590,FALSE
+Great Value Crunchy Cheese Puffs,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,2,14,0,1,360,FALSE
+Great Value Lightly Salted Rice Cakes,Snacks,Crackers,2 cakes (18g),18,70,1,0.5,0,15,0,0,50,FALSE
+Great Value Honey Graham Crackers,Snacks,Crackers,2 sheets (31g),31,130,2,3,0.5,24,1,8,160,FALSE
+Great Value Semi-Sweet Chocolate Chips,Snacks,Candy,1 tbsp (15g),15,70,1,4.5,3,9,1,7,0,FALSE
+Great Value Roasted Pistachios,Snacks,Nuts & Seeds,1 oz (28g),28,160,6,13,1.5,8,3,2,120,TRUE
+Great Value Sweetened Dried Cranberries,Snacks,Dried Fruit,1/4 cup (40g),40,130,0,0,0,33,2,29,5,FALSE
+Great Value Walnut Halves,Snacks,Nuts & Seeds,1 oz (28g),28,190,4,18,1.5,4,2,1,0,TRUE
+Great Value Fig Bars,Snacks,Cookies,2 bars (56g),56,180,2,3,0.5,36,2,18,160,FALSE
+Great Value Toasted Whole Grain Oat Cereal,Breakfast & Cereal,Cold Cereal,1 cup (28g),28,100,3,2,0.5,20,3,1,140,TRUE
+Great Value Bran Flakes Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (29g),29,90,3,0.5,0,23,5,5,200,TRUE
+Great Value Instant Grits Original,Breakfast & Cereal,Hot Cereal,1 packet (28g),28,100,2,0.5,0,22,1,0,210,FALSE
+Great Value Frosted Strawberry Toaster Pastries,Breakfast & Cereal,Frozen Breakfast,1 pastry (52g),52,200,2,5,1,37,1,16,180,FALSE
+Great Value Honey Almond Granola,Breakfast & Cereal,Cold Cereal,1/2 cup (55g),55,210,5,7,1,32,3,12,100,FALSE
+Great Value Frozen Bean & Cheese Burritos,Frozen,Frozen Meals,1 burrito (113g),113,280,10,9,3.5,40,4,2,640,FALSE
+Great Value Frozen Chicken Pot Pie,Frozen,Frozen Meals,1 pie (198g),198,450,12,26,11,42,2,4,750,FALSE
+Great Value Frozen Italian Style Meatballs,Frozen,Frozen Meals,3 meatballs (84g),84,190,11,14,6,5,0,2,540,FALSE
+Great Value Frozen Green Peas,Frozen,Frozen Vegetables,1/2 cup (80g),80,60,4,0,0,10,4,4,70,TRUE
+Great Value Frozen Stir Fry Vegetables,Frozen,Frozen Vegetables,1 cup (85g),85,25,1,0,0,5,2,2,20,TRUE
+Great Value Frozen Shelled Edamame,Frozen,Frozen Vegetables,1/2 cup (80g),80,100,9,4,0.5,8,4,2,10,TRUE
+Great Value Frozen Tater Tots,Frozen,Frozen Vegetables,9 pieces (84g),84,150,1,7,1,19,2,0,290,FALSE
+Great Value Ice Cream Sandwiches,Frozen,Ice Cream,1 sandwich (60g),60,160,2,6,3.5,25,1,14,90,FALSE
+Great Value Frozen Whipped Topping,Frozen,Frozen Desserts,2 tbsp (9g),9,25,0,1.5,1.5,2,0,2,0,FALSE
+Great Value Cranberry Juice Cocktail,Beverages,Juice,8 fl oz (240 mL),240,130,0,0,0,32,0,31,35,FALSE
+Great Value Coconut Water,Beverages,Juice,8 fl oz (240 mL),240,45,0,0,0,11,0,9,55,FALSE
+Great Value Lemon-Lime Sports Drink,Beverages,Sports Drinks,12 fl oz (355 mL),355,80,0,0,0,21,0,21,160,FALSE
+Great Value Energy Drink,Beverages,Energy Drinks,1 can (473 mL),473,160,0,0,0,41,0,39,200,FALSE
+Great Value Medium Roast Brewed Coffee,Beverages,Coffee,1 cup (240 mL),240,2,0,0,0,0,0,0,5,TRUE
+Great Value Unsweetened Green Tea,Beverages,Tea,8 fl oz (240 mL),240,0,0,0,0,0,0,0,0,TRUE
+Great Value Lemon-Lime Soda,Beverages,Soft Drinks,1 can (355 mL),355,140,0,0,0,38,0,38,40,FALSE
+Great Value Root Beer,Beverages,Soft Drinks,1 can (355 mL),355,160,0,0,0,43,0,43,55,FALSE
+Marketside Fresh Kiwi,Produce,Fresh Fruit,2 medium (150g),150,90,1.6,0.8,0,22,4.5,13,4,TRUE
+Marketside Fresh Sweet Cherries,Produce,Fresh Fruit,1 cup (138g),138,90,1.5,0.3,0.1,22,3,18,0,TRUE
+Marketside Fresh Plums,Produce,Fresh Fruit,2 medium (132g),132,60,1,0.4,0,16,2,14,0,TRUE
+Marketside Fresh Raspberries,Produce,Fresh Fruit,1 cup (123g),123,65,1.5,0.8,0,15,8,5,1,TRUE
+Marketside Fresh Blackberries,Produce,Fresh Fruit,1 cup (144g),144,60,2,0.7,0,14,7.6,7,1,TRUE
+Marketside Ruby Red Grapefruit,Produce,Fresh Fruit,1/2 medium (123g),123,50,1,0.2,0,13,2,9,0,TRUE
+Marketside Fresh Honeydew Melon,Produce,Fresh Fruit,1 cup cubed (170g),170,60,1,0.2,0,15,1.4,14,31,TRUE
+Great Value Shredded Mozzarella Cheese,Dairy & Eggs,Cheese,1/4 cup (28g),28,80,7,6,3.5,1,0,0,190,FALSE
+Great Value Feta Cheese Crumbles,Dairy & Eggs,Cheese,1/4 cup (38g),38,100,5,8,5,1,0,1,400,FALSE
+Great Value Part-Skim Ricotta Cheese,Dairy & Eggs,Cheese,1/4 cup (62g),62,90,7,5,3,3,0,0,70,FALSE
+Great Value Provolone Cheese Slices,Dairy & Eggs,Cheese,1 slice (21g),21,70,5,5,3,0,0,0,200,FALSE
+Great Value Blue Cheese Crumbles,Dairy & Eggs,Cheese,1/4 cup (28g),28,100,6,8,5,1,0,0,380,FALSE
+Great Value Low-Fat Buttermilk,Dairy & Eggs,Milk,1 cup (240 mL),240,100,8,2,1.5,12,0,12,125,TRUE
+Great Value Vegetable Oil Margarine Spread,Dairy & Eggs,Butter,1 tbsp (14g),14,80,0,9,2,0,0,0,90,FALSE
+Great Value Chocolate Pudding Cups,Dairy & Eggs,Desserts,1 cup (99g),99,120,2,3,1,21,0,17,135,FALSE
+Great Value Sourdough Bread,Bakery & Bread,Sliced Bread,1 slice (47g),47,120,4,0.5,0,23,1,0,230,FALSE
+Great Value Rye Bread,Bakery & Bread,Sliced Bread,1 slice (32g),32,80,3,1,0,15,2,1,180,FALSE
+Great Value Soft Dinner Rolls,Bakery & Bread,Buns & Rolls,1 roll (38g),38,100,3,1.5,0,18,1,2,180,FALSE
+Great Value Hot Dog Buns,Bakery & Bread,Buns & Rolls,1 bun (43g),43,120,4,2,0.5,21,1,3,210,FALSE
+Great Value Iced Cinnamon Rolls,Bakery & Bread,Donuts & Pastries,1 roll (99g),99,290,4,10,3,45,1,17,420,FALSE
+Great Value Beef Chuck Roast,Meat & Seafood,Beef,4 oz (112g),112,220,23,13,5,0,0,0,65,FALSE
+Great Value Pork Shoulder Roast,Meat & Seafood,Pork,4 oz (112g),112,210,20,14,5,0,0,0,65,FALSE
+Great Value Baby Back Pork Ribs,Meat & Seafood,Pork,4 oz (112g),112,280,19,22,8,0,0,0,90,FALSE
+Great Value Smoked Turkey Sausage,Meat & Seafood,Processed Meat,2 oz (56g),56,80,10,4,1.5,1,0,0,480,FALSE
+Great Value Bratwurst Sausage,Meat & Seafood,Processed Meat,1 link (85g),85,260,12,22,8,2,0,1,700,FALSE
+Great Value Turkey Bacon,Meat & Seafood,Processed Meat,2 slices (30g),30,70,5,5,1.5,1,0,0,360,FALSE
+Great Value Sliced Roast Beef,Meat & Seafood,Deli Meat,2 oz (56g),56,70,11,2,1,0,0,0,480,FALSE
+Great Value Canned Pink Salmon,Meat & Seafood,Canned Seafood,3 oz (85g),85,120,17,5,1,0,0,0,350,TRUE
+Great Value Imitation Crab Meat,Meat & Seafood,Seafood,3 oz (85g),85,80,6,0.5,0,13,0,6,540,FALSE
+Marketside Brussels Sprouts,Produce,Fresh Vegetables,1 cup (88g),88,40,3,0.5,0,8,3,2,20,TRUE
+Marketside Butternut Squash,Produce,Fresh Vegetables,1 cup cubed (140g),140,60,1,0,0,16,3,3,6,TRUE
+Marketside Eggplant,Produce,Fresh Vegetables,1 cup cubed (82g),82,20,1,0,0,5,3,3,2,TRUE
+Marketside Jalapeno Peppers,Produce,Fresh Vegetables,1 pepper (14g),14,5,0,0,0,1,0,1,0,TRUE
+Marketside Fresh Ginger Root,Produce,Fresh Vegetables,1 tbsp grated (6g),6,5,0,0,0,1,0,0,0,TRUE
+Marketside Green Onions,Produce,Fresh Vegetables,1/4 cup chopped (25g),25,10,1,0,0,2,1,1,5,TRUE
+Marketside Baby Arugula,Produce,Salad Greens,2 cups (40g),40,10,1,0,0,1,0,1,10,TRUE
+Marketside Fresh Beets,Produce,Fresh Vegetables,1 beet (82g),82,35,1,0,0,8,2,6,65,TRUE
+Marketside Fresh Radishes,Produce,Fresh Vegetables,1/2 cup sliced (58g),58,10,0,0,0,2,1,1,20,TRUE
+Marketside Sweet Corn on the Cob,Produce,Fresh Vegetables,1 ear (90g),90,90,3,1,0,19,2,5,15,TRUE
+Marketside Fresh Pomegranate,Produce,Fresh Fruit,1/2 cup arils (87g),87,70,1,1,0,16,3.5,12,3,TRUE
+Marketside Fresh Figs,Produce,Fresh Fruit,2 medium (100g),100,75,1,0.3,0,19,3,16,1,TRUE
+Great Value Pearl Couscous,Pantry,Rice & Grains,1/4 cup dry (43g),43,150,5,0.5,0,32,2,0,10,FALSE
+Great Value Pearl Barley,Pantry,Rice & Grains,1/4 cup dry (50g),50,180,6,1,0,39,8,0,0,TRUE
+Great Value Egg Noodles,Pantry,Pasta & Sauce,2 oz dry (56g),56,210,8,2.5,0.5,40,2,2,25,FALSE
+Great Value Chia Seeds,Pantry,Seeds,1 tbsp (12g),12,60,2,4,0.5,5,4,0,0,TRUE
+Great Value Ground Flaxseed,Pantry,Seeds,2 tbsp (14g),14,70,2.5,5,0.5,4,3.5,0,5,TRUE
+Great Value Creamy Almond Butter,Pantry,Spreads & Jams,2 tbsp (32g),32,200,7,18,1.5,6,3,1,0,TRUE
+Great Value Grape Jelly,Pantry,Spreads & Jams,1 tbsp (20g),20,50,0,0,0,13,0,12,5,FALSE
+Great Value Unsweetened Cocoa Powder,Pantry,Baking,1 tbsp (5g),5,15,1,1,0.5,3,2,0,0,TRUE
+Great Value Italian Dressing,Pantry,Condiments,2 tbsp (30g),30,70,0,7,1,2,0,1,260,FALSE
+Great Value Teriyaki Sauce,Pantry,Condiments,1 tbsp (18g),18,20,0,0,0,4,0,3,690,FALSE
+Great Value Tomato Paste,Pantry,Canned Goods,2 tbsp (33g),33,30,1,0,0,6,1,4,15,TRUE
+Great Value Beef Chili with Beans,Pantry,Soups,1 cup (250g),250,260,16,8,3.5,28,9,6,780,FALSE
+Great Value Chicken Flavor Ramen Noodles,Pantry,Boxed Meals,1/2 block (43g),43,190,4,7,3.5,26,1,1,830,FALSE
+Great Value Canned Coconut Milk,Pantry,Canned Goods,1/3 cup (80 mL),80,120,1,12,11,2,0,1,15,FALSE
+Great Value Sliced Black Olives,Pantry,Canned Goods,1/4 cup (35g),35,25,0,2.5,0,1,1,0,120,TRUE
+Great Value Mandarin Oranges in Juice,Pantry,Canned Goods,1/2 cup (124g),124,60,1,0,0,15,1,13,10,FALSE
+Great Value Sea Salt Pita Chips,Snacks,Chips & Crisps,1 oz (28g),28,130,3,5,0.5,19,1,0,190,FALSE
+Great Value Pork Rinds,Snacks,Chips & Crisps,1/2 oz (14g),14,80,9,5,2,0,0,0,270,FALSE
+Great Value Dark Chocolate Squares,Snacks,Candy,3 squares (40g),40,210,2,15,9,17,3,10,5,FALSE
+Great Value Sweet & Salty Nut Bars,Snacks,Bars,1 bar (40g),40,170,4,9,2.5,18,1,9,90,FALSE
+Great Value Roasted Pumpkin Seeds,Snacks,Nuts & Seeds,1 oz (28g),28,150,8,13,2.5,3,2,0,10,TRUE
+Great Value Roasted Mixed Nuts,Snacks,Nuts & Seeds,1 oz (28g),28,170,5,15,2,6,2,1,100,TRUE
+Great Value Pecan Halves,Snacks,Nuts & Seeds,1 oz (28g),28,200,3,21,2,4,3,1,0,TRUE
+Great Value Dried Mango Slices,Snacks,Dried Fruit,1/4 cup (40g),40,130,1,0,0,31,2,26,5,FALSE
+Great Value Seedless Raisins,Snacks,Dried Fruit,1/4 cup (40g),40,130,1,0,0,31,2,25,10,FALSE
+Great Value Roasted Seaweed Snacks,Snacks,Seaweed,1 pack (5g),5,25,1,2,0,1,0,0,55,TRUE
+Great Value Cream Sandwich Cookies,Snacks,Cookies,3 cookies (34g),34,160,1,7,1.5,25,0,14,180,FALSE
+Great Value Crispy Rice Cereal,Breakfast & Cereal,Cold Cereal,1 1/4 cup (33g),33,130,2,0,0,29,0,3,190,FALSE
+Great Value Fruity Rings Cereal,Breakfast & Cereal,Cold Cereal,1 cup (29g),29,110,1,1,0,25,1,11,135,FALSE
+Great Value Frosted Mini Wheats Cereal,Breakfast & Cereal,Cold Cereal,24 biscuits (59g),59,190,5,1,0,45,6,12,0,FALSE
+Great Value Cinnamon Toast Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (31g),31,130,2,2.5,0,25,1,9,200,FALSE
+Great Value Frozen Corn Dogs,Frozen,Frozen Meals,1 corn dog (75g),75,210,5,11,3,22,0,5,450,FALSE
+Great Value Frozen Hash Brown Patties,Frozen,Frozen Vegetables,1 patty (56g),56,60,1,3,0.5,9,1,0,120,FALSE
+Great Value Frozen Mango Chunks,Frozen,Frozen Fruit,1 cup (140g),140,100,1,0,0,25,2,22,0,TRUE
+Great Value Frozen Pizza Rolls,Frozen,Frozen Meals,6 rolls (85g),85,210,6,10,3.5,25,1,1,420,FALSE
+Great Value Frozen Fruit Juice Bars,Frozen,Frozen Desserts,1 bar (40g),40,25,0,0,0,6,0,5,0,FALSE
+Great Value Frozen Fudge Bars,Frozen,Frozen Desserts,1 bar (66g),66,100,2,1,0.5,22,2,12,60,FALSE
+Great Value Frozen Veggie Burgers,Frozen,Frozen Meals,1 patty (71g),71,110,10,3,0.5,10,4,1,330,TRUE
+Great Value 100% Grape Juice,Beverages,Juice,8 fl oz (240 mL),240,150,0,0,0,37,0,36,15,FALSE
+Great Value Fruit Punch,Beverages,Juice,8 fl oz (240 mL),240,110,0,0,0,28,0,26,40,FALSE
+Great Value Vegetable Juice,Beverages,Juice,8 fl oz (240 mL),240,50,2,0,0,11,2,8,640,FALSE
+Great Value Orange Soda,Beverages,Soft Drinks,1 can (355 mL),355,160,0,0,0,44,0,44,55,FALSE
+Great Value Ginger Ale,Beverages,Soft Drinks,1 can (355 mL),355,130,0,0,0,35,0,35,25,FALSE
+Great Value Milk Chocolate Hot Cocoa Mix,Beverages,Hot Beverages,1 packet (28g),28,80,1,1,0.5,17,0,12,150,FALSE
+Great Value Chocolate Protein Shake,Beverages,Protein Drinks,1 bottle (325 mL),325,160,30,3,0.5,4,1,1,230,TRUE
+Great Value Cold Brew Coffee,Beverages,Coffee,8 fl oz (240 mL),240,5,0,0,0,1,0,0,10,TRUE
+Great Value Colby Jack Cheese Block,Dairy & Eggs,Cheese,1 oz (28g),28,110,7,9,5,0,0,0,170,FALSE
+Great Value Blueberry Greek Yogurt,Dairy & Eggs,Yogurt,1 cup (150g),150,130,12,2,1,14,0,12,60,FALSE
+Great Value Whipped Cream Topping,Dairy & Eggs,Cream,2 tbsp (6g),6,15,0,1.5,1,1,0,0,5,FALSE
+Great Value Coconut Milk Beverage,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,45,0,4.5,4,1,0,0,15,FALSE
+Great Value Unsweetened Cashew Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,25,0,2,0,1,0,0,160,TRUE
+Great Value American Cheese Slices,Dairy & Eggs,Cheese,1 slice (21g),21,70,4,5,3,1,0,1,300,FALSE
+Great Value Shredded Mexican Blend Cheese,Dairy & Eggs,Cheese,1/4 cup (28g),28,110,7,9,5,1,0,0,190,FALSE
+Great Value Sweetened Condensed Milk,Dairy & Eggs,Milk,2 tbsp (39g),39,130,3,3,2,22,0,22,50,FALSE
+Great Value Brioche Hamburger Buns,Bakery & Bread,Buns & Rolls,1 bun (60g),60,190,5,4,2,32,1,6,290,FALSE
+Great Value Chocolate Chip Muffins,Bakery & Bread,Muffins,1 muffin (95g),95,360,5,16,4,50,1,29,330,FALSE
+Great Value French Bread Loaf,Bakery & Bread,Sliced Bread,2 oz (56g),56,150,5,1,0,29,1,1,280,FALSE
+Great Value Garlic Naan,Bakery & Bread,Pita & Flatbread,1 piece (45g),45,120,3,2,0.5,21,1,2,220,FALSE
+Great Value Angel Food Cake,Bakery & Bread,Cakes,1 slice (36g),36,70,2,0,0,16,0,10,140,FALSE
+Great Value Hard Taco Shells,Bakery & Bread,Tortillas,2 shells (26g),26,130,2,6,1.5,18,1,0,180,FALSE
+Great Value Beef Stew Meat,Meat & Seafood,Beef,4 oz (112g),112,190,22,11,4.5,0,0,0,60,FALSE
+Great Value Ground Pork,Meat & Seafood,Pork,4 oz (112g),112,280,19,22,8,0,0,0,65,FALSE
+Great Value Ground Chicken,Meat & Seafood,Poultry,4 oz (112g),112,170,20,10,2.5,0,0,0,75,TRUE
+Great Value Pork Tenderloin,Meat & Seafood,Pork,4 oz (112g),112,120,23,3,1,0,0,0,55,TRUE
+Great Value Genoa Salami,Meat & Seafood,Deli Meat,1 oz (28g),28,110,6,9,3.5,1,0,0,500,FALSE
+Great Value Bologna,Meat & Seafood,Deli Meat,1 slice (28g),28,90,3,8,3,1,0,1,310,FALSE
+Great Value Frozen Sea Scallops,Meat & Seafood,Seafood,3 oz (84g),84,80,16,0.5,0,2,0,0,200,TRUE
+Great Value Frozen Haddock Fillets,Meat & Seafood,Seafood,4 oz (112g),112,90,21,0.5,0,0,0,0,85,TRUE
+Marketside Red Cabbage,Produce,Fresh Vegetables,1 cup shredded (89g),89,25,1,0,0,6,2,3,20,TRUE
+Marketside Bok Choy,Produce,Fresh Vegetables,1 cup shredded (70g),70,10,1,0,0,2,1,1,45,TRUE
+Marketside Sugar Snap Peas,Produce,Fresh Vegetables,1 cup (98g),98,40,3,0,0,7,3,4,5,TRUE
+Marketside Fresh Artichokes,Produce,Fresh Vegetables,1 medium (120g),120,60,4,0,0,13,7,1,120,TRUE
+Marketside Spaghetti Squash,Produce,Fresh Vegetables,1 cup (155g),155,40,1,0.5,0,10,2,4,30,TRUE
+Marketside Coleslaw Mix,Produce,Fresh Vegetables,1 cup (85g),85,25,1,0,0,5,2,3,15,TRUE
+Marketside Clementines,Produce,Fresh Fruit,2 clementines (148g),148,70,1,0,0,18,2,14,2,TRUE
+Marketside Fresh Nectarines,Produce,Fresh Fruit,1 medium (142g),142,60,1,0.4,0,15,2.4,11,0,TRUE
+Marketside Fresh Apricots,Produce,Fresh Fruit,3 apricots (105g),105,50,1,0,0,12,2,10,1,TRUE
+Marketside Fresh Papaya,Produce,Fresh Fruit,1 cup cubed (140g),140,60,1,0.4,0,15,2.5,11,12,TRUE
+Great Value Cornstarch,Pantry,Baking,1 tbsp (8g),8,30,0,0,0,7,0,0,0,FALSE
+Great Value Cream of Mushroom Soup,Pantry,Soups,1/2 cup (126g),126,100,2,7,2,8,1,1,870,FALSE
+Great Value Cream of Chicken Soup,Pantry,Soups,1/2 cup (126g),126,110,2,7,2,9,0,1,870,FALSE
+Great Value Vegetable Beef Soup,Pantry,Soups,1 cup (245g),245,90,5,1.5,0.5,14,2,3,700,FALSE
+Great Value Pizza Sauce,Pantry,Pasta & Sauce,1/4 cup (62g),62,40,1,1.5,0,6,1,3,250,FALSE
+Great Value Dark Red Kidney Beans,Pantry,Canned Goods,1/2 cup (130g),130,110,7,0.5,0,20,6,1,310,TRUE
+Great Value 100% Pure Pumpkin Puree,Pantry,Canned Goods,1/2 cup (122g),122,40,1,0.5,0,9,5,4,5,TRUE
+Great Value Mixed Vegetables Canned,Pantry,Canned Goods,1/2 cup (130g),130,40,2,0,0,8,2,3,330,TRUE
+Great Value Pineapple Chunks in Juice,Pantry,Canned Goods,1/2 cup (125g),125,60,0,0,0,16,1,14,0,FALSE
+Great Value Fruit Cocktail in Juice,Pantry,Canned Goods,1/2 cup (123g),123,70,0,0,0,18,1,15,5,FALSE
+Great Value Elbow Macaroni,Pantry,Pasta & Sauce,2 oz dry (56g),56,200,7,1,0,42,2,2,0,FALSE
+Great Value Coconut Oil,Pantry,Oils & Vinegars,1 tbsp (14g),14,120,0,14,12,0,0,0,0,FALSE
+Great Value Red Wine Vinegar,Pantry,Oils & Vinegars,1 tbsp (15 mL),15,0,0,0,0,0,0,0,0,TRUE
+Great Value Worcestershire Sauce,Pantry,Condiments,1 tsp (5 mL),5,5,0,0,0,1,0,1,65,TRUE
+Great Value Caesar Dressing,Pantry,Condiments,2 tbsp (30g),30,160,1,17,3,1,0,0,270,FALSE
+Great Value Sunflower Seed Butter,Pantry,Spreads & Jams,2 tbsp (32g),32,200,6,17,1.5,7,3,3,0,TRUE
+Great Value Pure Maple Syrup,Pantry,Sweeteners,1/4 cup (60 mL),60,200,0,0,0,52,0,48,15,FALSE
+Great Value Sliced Jalapeno Peppers,Pantry,Canned Goods,2 tbsp (30g),30,5,0,0,0,1,0,0,190,TRUE
+Great Value Red Enchilada Sauce,Pantry,Condiments,1/4 cup (61g),61,20,0,0,0,4,1,2,330,FALSE
+Great Value Dried Apricots,Snacks,Dried Fruit,1/4 cup (40g),40,80,1,0,0,20,2,16,5,FALSE
+Great Value Banana Chips,Snacks,Dried Fruit,1 oz (28g),28,150,1,9,8,17,2,10,0,FALSE
+Great Value Peanut Butter Cups,Snacks,Candy,2 cups (34g),34,180,3,11,4,19,1,17,100,FALSE
+Great Value Caramel Popcorn,Snacks,Popcorn,1 cup (30g),30,130,1,3,0.5,25,1,17,90,FALSE
+Great Value Veggie Straws,Snacks,Chips & Crisps,1 oz (28g),28,130,1,7,0.5,18,0,1,230,FALSE
+Great Value Baked Cheddar Cracker Squares,Snacks,Crackers,1 oz (28g),28,130,3,5,1,18,1,0,230,FALSE
+Great Value Animal Crackers,Snacks,Crackers,14 crackers (30g),30,130,2,3.5,0.5,22,0,7,90,FALSE
+Great Value Oatmeal Raisin Cookies,Snacks,Cookies,2 cookies (30g),30,130,2,5,1,20,1,10,115,FALSE
+Great Value Roasted Hazelnuts,Snacks,Nuts & Seeds,1 oz (28g),28,180,4,17,1.5,5,3,1,0,TRUE
+Great Value Jumbo Marshmallows,Snacks,Candy,4 marshmallows (28g),28,90,0,0,0,23,0,16,25,FALSE
+Great Value Dry Roasted Edamame,Snacks,Nuts & Seeds,1/4 cup (30g),30,130,12,4,0.5,10,6,0,130,TRUE
+Great Value Farina Hot Cereal,Breakfast & Cereal,Hot Cereal,3 tbsp dry (28g),28,100,3,0,0,21,1,0,0,FALSE
+Great Value Chocolate Rice Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (30g),30,120,1,1,0.5,26,1,12,190,FALSE
+Great Value Frozen Buttermilk Pancakes,Breakfast & Cereal,Frozen Breakfast,3 pancakes (110g),110,230,5,4,1,44,1,10,590,FALSE
+Great Value Strawberry Breakfast Bars,Breakfast & Cereal,Cereal Bars,1 bar (37g),37,130,1,3,0.5,26,1,13,90,FALSE
+Great Value Frozen Pepperoni Pizza,Frozen,Frozen Meals,1/3 pizza (113g),113,330,13,14,6,36,2,5,660,FALSE
+Great Value Frozen Mozzarella Sticks,Frozen,Frozen Meals,3 pieces (85g),85,250,10,14,5,20,1,1,500,FALSE
+Great Value Frozen Onion Rings,Frozen,Frozen Vegetables,6 rings (85g),85,190,3,10,1.5,23,1,2,340,FALSE
+Great Value Chocolate Ice Cream,Frozen,Ice Cream,2/3 cup (88g),88,180,3,10,6,20,1,18,50,FALSE
+Great Value Frozen Lasagna with Meat Sauce,Frozen,Frozen Meals,1 cup (227g),227,320,16,13,6,35,3,6,690,FALSE
+Great Value Frozen Grilled Chicken Strips,Frozen,Frozen Meals,3 oz (85g),85,110,19,2.5,0.5,2,0,0,360,TRUE
+Great Value 100% Pineapple Juice,Beverages,Juice,8 fl oz (240 mL),240,130,0,0,0,32,0,28,10,FALSE
+Great Value Prune Juice,Beverages,Juice,8 fl oz (240 mL),240,180,1,0,0,45,2,42,20,FALSE
+Great Value Cream Soda,Beverages,Soft Drinks,1 can (355 mL),355,190,0,0,0,50,0,50,55,FALSE
+Great Value Cherry Cola,Beverages,Soft Drinks,1 can (355 mL),355,150,0,0,0,40,0,40,40,FALSE
+Great Value Black Tea Brewed,Beverages,Tea,8 fl oz (240 mL),240,0,0,0,0,0,0,0,5,TRUE
+Great Value Chamomile Herbal Tea,Beverages,Tea,8 fl oz (240 mL),240,0,0,0,0,0,0,0,0,TRUE
+Great Value Instant Coffee,Beverages,Coffee,1 tsp (2g),2,5,0,0,0,1,0,0,0,TRUE
+Great Value Vanilla Protein Shake,Beverages,Protein Drinks,1 bottle (325 mL),325,160,30,3,0.5,4,1,1,230,TRUE
+Lay's Classic Potato Chips,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,1.5,15,1,0,170,FALSE
+Utz Original Potato Chips,Snacks,Chips & Crisps,1 oz (28g),28,150,2,9,2.5,15,1,0,115,FALSE
+Ruffles Original Potato Chips,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,1.5,14,1,0,160,FALSE
+Pringles Original Potato Crisps,Snacks,Chips & Crisps,1 oz (28g),28,150,1,9,2.5,15,1,0,150,FALSE
+Doritos Nacho Cheese Tortilla Chips,Snacks,Chips & Crisps,1 oz (28g),28,150,2,8,1,18,1,1,210,FALSE
+Cheetos Crunchy Cheese Flavored Snacks,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,2,15,1,1,250,FALSE
+Tostitos Scoops Tortilla Chips,Snacks,Chips & Crisps,1 oz (28g),28,140,2,7,1,18,1,0,115,FALSE
+Kettle Brand Sea Salt Potato Chips,Snacks,Chips & Crisps,1 oz (28g),28,150,2,8,1,16,1,0,120,FALSE
+Fritos Original Corn Chips,Snacks,Chips & Crisps,1 oz (28g),28,160,2,10,1.5,15,1,0,120,FALSE
+Oreo Chocolate Sandwich Cookies,Snacks,Cookies,3 cookies (34g),34,160,1,7,2,25,0,14,180,FALSE
+Chips Ahoy! Original Chocolate Chip Cookies,Snacks,Cookies,3 cookies (33g),33,160,2,8,3,22,1,11,105,FALSE
+Nutter Butter Peanut Butter Sandwich Cookies,Snacks,Cookies,2 cookies (28g),28,130,2,5,1,19,0,8,105,FALSE
+Ritz Original Crackers,Snacks,Crackers,5 crackers (16g),16,80,1,3.5,0.5,10,0,1,135,FALSE
+Triscuit Original Whole Grain Wheat Crackers,Snacks,Crackers,6 crackers (28g),28,120,3,3.5,0,20,3,0,160,TRUE
+Wheat Thins Original Crackers,Snacks,Crackers,16 crackers (31g),31,140,2,5,0.5,22,2,4,200,FALSE
+Goldfish Cheddar Crackers,Snacks,Crackers,55 pieces (30g),30,140,4,5,1,20,1,0,250,FALSE
+Cheez-It Original Baked Snack Crackers,Snacks,Crackers,27 crackers (30g),30,150,3,8,2,17,0,0,230,FALSE
+Cheerios Original Cereal,Breakfast & Cereal,Cold Cereal,1 1/2 cups (39g),39,140,4,2.5,0.5,29,4,2,190,TRUE
+Kellogg's Frosted Flakes Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (36g),36,140,1,0,0,34,1,12,150,FALSE
+Honey Nut Cheerios Cereal,Breakfast & Cereal,Cold Cereal,1 cup (37g),37,140,3,1.5,0,29,3,12,180,FALSE
+Cinnamon Toast Crunch Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (31g),31,130,1,3,0.5,25,1,10,180,FALSE
+Froot Loops Cereal,Breakfast & Cereal,Cold Cereal,1 cup (29g),29,110,1,1,0,25,1,12,125,FALSE
+Honey Bunches of Oats Honey Roasted Cereal,Breakfast & Cereal,Cold Cereal,3/4 cup (30g),30,120,2,2.5,0.5,24,1,7,135,FALSE
+Special K Original Cereal,Breakfast & Cereal,Cold Cereal,1 1/4 cups (31g),31,120,6,0.5,0,23,0,4,220,FALSE
+Quaker Old Fashioned Rolled Oats,Breakfast & Cereal,Oatmeal,1/2 cup dry (40g),40,150,5,3,0.5,27,4,1,0,TRUE
+Pepsi Cola,Beverages,Soft Drinks,1 can (355 mL),355,150,0,0,0,41,0,41,30,FALSE
+Sprite Lemon-Lime Soda,Beverages,Soft Drinks,1 can (355 mL),355,140,0,0,0,38,0,38,65,FALSE
+Dr Pepper,Beverages,Soft Drinks,1 can (355 mL),355,150,0,0,0,40,0,40,55,FALSE
+Mountain Dew,Beverages,Soft Drinks,1 can (355 mL),355,170,0,0,0,46,0,46,60,FALSE
+Diet Coke,Beverages,Soft Drinks,1 can (355 mL),355,0,0,0,0,0,0,0,40,FALSE
+Gatorade Lemon-Lime Thirst Quencher,Beverages,Sports Drinks,12 fl oz (355 mL),355,80,0,0,0,21,0,21,160,FALSE
+Red Bull Energy Drink,Beverages,Energy Drinks,1 can (250 mL),250,110,0,0,0,28,0,27,105,FALSE
+Monster Energy Drink,Beverages,Energy Drinks,1 can (473 mL),473,210,0,0,0,54,0,54,370,FALSE
+Tropicana Pure Premium Orange Juice,Beverages,Juice,8 fl oz (240 mL),240,110,2,0,0,26,0,22,0,FALSE
+Ocean Spray Cranberry Juice Cocktail,Beverages,Juice,8 fl oz (240 mL),240,110,0,0,0,28,0,27,35,FALSE
+Chobani Plain Nonfat Greek Yogurt,Dairy & Eggs,Yogurt,3/4 cup (170g),170,90,16,0,0,5,0,4,55,TRUE
+Yoplait Original Strawberry Yogurt,Dairy & Eggs,Yogurt,1 container (170g),170,150,5,1.5,1,26,0,18,90,FALSE
+Oikos Triple Zero Vanilla Greek Yogurt,Dairy & Eggs,Yogurt,1 cup (150g),150,90,15,0,0,6,3,0,55,TRUE
+Philadelphia Original Cream Cheese,Dairy & Eggs,Cheese,2 tbsp (30g),30,100,2,9,5,2,0,1,105,FALSE
+Kraft Singles American Cheese Slices,Dairy & Eggs,Cheese,1 slice (19g),19,60,3,4,2.5,2,0,1,250,FALSE
+Sargento Shredded Mild Cheddar Cheese,Dairy & Eggs,Cheese,1/4 cup (28g),28,110,7,9,5,1,0,0,190,FALSE
+Land O'Lakes Salted Butter,Dairy & Eggs,Butter,1 tbsp (14g),14,100,0,11,7,0,0,0,90,FALSE
+Fairlife 2% Ultra-Filtered Milk,Dairy & Eggs,Milk,1 cup (240 mL),240,120,13,4.5,3,6,0,6,115,TRUE
+Silk Unsweetened Almond Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,30,1,2.5,0,1,0,0,170,TRUE
+Oatly Original Oat Milk,Dairy & Eggs,Milk Alternatives,1 cup (240 mL),240,120,3,5,0.5,16,2,7,100,FALSE
+DiGiorno Rising Crust Pepperoni Pizza,Frozen,Frozen Meals,1/6 pizza (147g),147,370,16,16,6,40,2,5,780,FALSE
+Hot Pockets Pepperoni Pizza Sandwich,Frozen,Frozen Meals,1 sandwich (127g),127,310,10,13,5,37,2,4,590,FALSE
+Eggo Homestyle Frozen Waffles,Frozen,Frozen Breakfast,2 waffles (70g),70,190,4,7,1.5,28,1,4,360,FALSE
+Ben & Jerry's Chocolate Chip Cookie Dough Ice Cream,Frozen,Ice Cream,1/2 cup (106g),106,280,4,14,9,34,1,23,80,FALSE
+Breyers Natural Vanilla Ice Cream,Frozen,Ice Cream,2/3 cup (88g),88,150,3,8,5,17,0,15,45,FALSE
+Stouffer's Lasagna with Meat & Sauce,Frozen,Frozen Meals,1 cup (227g),227,330,17,12,6,39,4,6,750,FALSE
+Birds Eye Steamfresh Broccoli Florets,Frozen,Frozen Vegetables,1 cup (85g),85,25,2,0,0,5,2,2,20,TRUE
+Dole Frozen Whole Strawberries,Frozen,Frozen Fruit,1 cup (140g),140,50,1,0,0,12,3,8,0,TRUE
+Heinz Tomato Ketchup,Pantry,Condiments,1 tbsp (17g),17,20,0,0,0,5,0,4,160,FALSE
+Hellmann's Real Mayonnaise,Pantry,Condiments,1 tbsp (13g),13,90,0,10,1.5,0,0,0,90,FALSE
+Skippy Creamy Peanut Butter,Pantry,Spreads & Jams,2 tbsp (32g),32,190,7,16,3,7,2,3,150,TRUE
+Jif Creamy Peanut Butter,Pantry,Spreads & Jams,2 tbsp (32g),32,190,7,16,3,8,2,3,140,TRUE
+Smucker's Strawberry Preserves,Pantry,Spreads & Jams,1 tbsp (20g),20,50,0,0,0,13,0,12,10,FALSE
+Campbell's Chicken Noodle Soup,Pantry,Soups,1 cup prepared (240g),240,60,3,1.5,0.5,9,1,1,790,FALSE
+Campbell's Condensed Tomato Soup,Pantry,Soups,1/2 cup condensed (126g),126,90,2,0,0,20,1,12,480,FALSE
+Barilla Spaghetti Pasta,Pantry,Pasta & Sauce,2 oz dry (56g),56,200,7,1,0,42,2,2,0,FALSE
+Barilla Whole Grain Spaghetti,Pantry,Pasta & Sauce,2 oz dry (56g),56,190,8,1.5,0,39,6,2,0,TRUE
+Ragu Traditional Pasta Sauce,Pantry,Pasta & Sauce,1/2 cup (125g),125,70,2,1.5,0,11,2,7,440,FALSE
+Rao's Homemade Marinara Sauce,Pantry,Pasta & Sauce,1/2 cup (125g),125,90,2,6,1,7,2,5,470,FALSE
+Uncle Ben's Original Long Grain Rice,Pantry,Rice & Grains,1/4 cup dry (45g),45,160,3,0,0,36,0,0,0,FALSE
+Bush's Best Original Baked Beans,Pantry,Canned Goods,1/2 cup (130g),130,140,6,1,0,27,5,11,500,FALSE
+French's Classic Yellow Mustard,Pantry,Condiments,1 tsp (5g),5,0,0,0,0,0,0,0,55,TRUE
+Frank's RedHot Original Hot Sauce,Pantry,Condiments,1 tsp (5g),5,0,0,0,0,0,0,0,190,FALSE
+Huy Fong Sriracha Hot Chili Sauce,Pantry,Condiments,1 tsp (5g),5,5,0,0,0,1,0,1,100,TRUE
+Kikkoman Soy Sauce,Pantry,Condiments,1 tbsp (15 mL),15,10,1,0,0,1,0,0,920,FALSE
+Wesson Vegetable Oil,Pantry,Oils & Vinegars,1 tbsp (14g),14,120,0,14,1,0,0,0,0,FALSE
+Pompeian Extra Virgin Olive Oil,Pantry,Oils & Vinegars,1 tbsp (14g),14,120,0,14,2,0,0,0,0,TRUE
+Domino Granulated Sugar,Pantry,Sweeteners,1 tsp (4g),4,15,0,0,0,4,0,4,0,FALSE
+Gold Medal All-Purpose Flour,Pantry,Baking,1/4 cup (30g),30,110,3,0,0,23,1,0,0,FALSE
+Snickers Chocolate Candy Bar,Snacks,Candy,1 bar (52g),52,250,4,12,4.5,33,1,27,120,FALSE
+M&M's Milk Chocolate Candies,Snacks,Candy,1 pack (47g),47,230,2,9,5,34,1,30,30,FALSE
+Reese's Peanut Butter Cups,Snacks,Candy,2 cups (42g),42,210,5,13,4.5,24,1,21,150,FALSE
+KIND Dark Chocolate Nuts & Sea Salt Bar,Snacks,Bars,1 bar (40g),40,180,6,14,3,16,7,5,85,TRUE
+Planters Dry Roasted Peanuts,Snacks,Nuts & Seeds,1 oz (28g),28,170,7,14,2,5,2,1,135,TRUE
+Blue Diamond Smokehouse Almonds,Snacks,Nuts & Seeds,1 oz (28g),28,170,6,15,1,5,3,1,190,TRUE
