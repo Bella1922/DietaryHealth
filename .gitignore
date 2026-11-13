@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Database files
+dietaryhealth.db
+dietaryhealth.db-journal
+dietaryhealth.sqbpro
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# VS Code
+.vscode/
+
+# Flask session files
+flask_session/
