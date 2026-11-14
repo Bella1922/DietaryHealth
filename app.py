@@ -3,12 +3,11 @@ DietaryHealth — Flask Backend
 Connects to dietaryhealth.db (SQLite) and serves the API the frontend needs.
 
 Run:
-    pip install flask bcrypt --break-system-packages
+    pip install flask bcrypt pandas --break-system-packages
     python app.py
 
 Then open your frontend at http://127.0.0.1:5500 (VS Code Live Server)
 and the API will be at http://127.0.0.1:5000/api/...
-
 """
 
 from flask import Flask, request, jsonify, session
@@ -16,8 +15,28 @@ from flask.helpers import send_from_directory
 import sqlite3
 import bcrypt
 import os
+import random
 from datetime import date, datetime
 from functools import wraps
+
+try:
+    import pandas as pd
+    _PANDAS_OK = True
+except ImportError:
+    _PANDAS_OK = False
+
+# Path to the Walmart CSV (lives in backend/ folder next to Rachel's notebook)
+_BACKEND_DIR = os.path.join(os.path.dirname(__file__), 'backend')
+CSV_PATH = os.path.join(_BACKEND_DIR, 'Food_from_Walmart_with_healthy_474.csv')
+
+# Cache the dataframe so we don't reload it on every request
+_food_df = None
+
+def get_food_df():
+    global _food_df
+    if _food_df is None and _PANDAS_OK and os.path.exists(CSV_PATH):
+        _food_df = pd.read_csv(CSV_PATH)
+    return _food_df
 
 app = Flask(__name__)
 
@@ -483,6 +502,180 @@ def dashboard_today():
         'totalKcalToday': total_kcal,
         'cupsToday': water_row['cups'] if water_row else 0,
         'meals': meals,
+    }), 200
+
+
+# ─────────────────────────────────────────────
+#  6. FOOD RECOMMENDATIONS
+# ─────────────────────────────────────────────
+
+@app.route('/api/recommendations', methods=['GET'])
+@login_required
+def get_recommendations():
+    """
+    Returns personalized food recommendations from the Walmart dataset,
+    filtered by the user's dietary restrictions/allergies and weighted
+    by their goal (lose / maintain / gain weight).
+
+    Response shape:
+      {
+        "bmi": 22,
+        "bmr": 1700,
+        "dailyCalories": 1700,
+        "goal": "maintain weight",
+        "recommendations": {
+          "breakfast": [ {name, category, subcategory, calories, protein, healthy}, ... ],
+          "lunch":     [ ... ],
+          "dinner":    [ ... ],
+          "snack":     [ ... ]
+        }
+      }
+    """
+    user_id = session['user_id']
+    conn = get_db()
+
+    profile = conn.execute(
+        """SELECT gender, age, height_cm, weight_kg, activity_level, calorie_goal
+           FROM user_profiles WHERE user_id = ?""", (user_id,)
+    ).fetchone()
+
+    restrictions = [r['restriction'].lower() for r in conn.execute(
+        "SELECT restriction FROM user_dietary_restrictions WHERE user_id = ?", (user_id,)
+    ).fetchall()]
+
+    allergies = [a['allergen'].lower() for a in conn.execute(
+        "SELECT allergen FROM user_allergies WHERE user_id = ?", (user_id,)
+    ).fetchall()]
+
+    goals = [g['goal'].lower() for g in conn.execute(
+        "SELECT goal FROM user_goals WHERE user_id = ?", (user_id,)
+    ).fetchall()]
+
+    conn.close()
+
+    # ── Fallback if profile not filled yet ──────────────────────────────────
+    if not profile:
+        return jsonify({'error': 'Profile not found. Please complete the questionnaire.'}), 404
+
+    gender        = profile['gender'] or 'M'
+    age           = profile['age'] or 20
+    height_cm     = profile['height_cm'] or 170
+    weight_kg     = profile['weight_kg'] or 70
+    activity      = (profile['activity_level'] or 'sedentary').lower()
+    calorie_goal  = profile['calorie_goal'] or 2000
+
+    # ── BMI ─────────────────────────────────────────────────────────────────
+    height_m = height_cm / 100
+    bmi = round(weight_kg / (height_m ** 2))
+
+    # ── BMR (Mifflin-St Jeor) ────────────────────────────────────────────────
+    if gender == 'M':
+        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+    else:
+        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+
+    # ── Daily calories based on activity ────────────────────────────────────
+    multipliers = {
+        'sedentary': 1.0,
+        'lightly active': 1.375,
+        'moderately active': 1.55,
+        'very active': 1.725,
+        'extra active': 1.9,
+    }
+    daily_calories = round(bmr * multipliers.get(activity, 1.0))
+
+    # ── Determine goal ───────────────────────────────────────────────────────
+    goal = goals[0] if goals else 'maintain weight'
+
+    # ── Load & filter food dataframe ─────────────────────────────────────────
+    df = get_food_df()
+    if df is None:
+        # pandas not installed or CSV missing — return empty recommendations
+        return jsonify({
+            'bmi': bmi, 'bmr': round(bmr), 'dailyCalories': daily_calories,
+            'goal': goal,
+            'recommendations': {'breakfast': [], 'lunch': [], 'dinner': [], 'snack': []},
+            'warning': 'Food data not available. Make sure pandas is installed and the CSV is in backend/.'
+        }), 200
+
+    blocked = restrictions + allergies  # combined list of things to avoid
+
+    if blocked:
+        # Remove any row where Category, Subcategory, or Food Name contains a blocked term
+        def row_blocked(row):
+            text = ' '.join([
+                str(row.get('Category', '')),
+                str(row.get('Subcategory', '')),
+                str(row.get('Food Name', '')),
+            ]).lower()
+            return any(b in text for b in blocked)
+        mask = df.apply(row_blocked, axis=1)
+        filtered = df[~mask].copy()
+    else:
+        filtered = df.copy()
+
+    # ── Score foods by goal ──────────────────────────────────────────────────
+    # lose weight  → favor low-calorie, high-protein, Healthy=True
+    # gain weight  → favor high-calorie, high-protein
+    # maintain     → favor Healthy=True, balanced calories
+    if 'lose' in goal:
+        filtered['_score'] = (
+            filtered['Healthy'].astype(int) * 3
+            + filtered['Protein (g)'] / 10
+            - filtered['Calories'] / 200
+        )
+    elif 'gain' in goal:
+        filtered['_score'] = (
+            filtered['Protein (g)'] / 5
+            + filtered['Calories'] / 100
+        )
+    else:  # maintain
+        filtered['_score'] = (
+            filtered['Healthy'].astype(int) * 2
+            + filtered['Protein (g)'] / 10
+        )
+
+    filtered = filtered.sort_values('_score', ascending=False)
+
+    # ── Assign categories to meal slots ─────────────────────────────────────
+    SLOT_CATEGORIES = {
+        'breakfast': ['Breakfast & Cereal', 'Dairy & Eggs', 'Bakery & Bread', 'Beverages'],
+        'lunch':     ['Meat & Seafood', 'Deli', 'Dairy & Eggs', 'Produce', 'Bakery & Bread'],
+        'dinner':    ['Meat & Seafood', 'Produce', 'Pantry', 'Frozen'],
+        'snack':     ['Snacks', 'Beverages', 'Produce', 'Dairy & Eggs'],
+    }
+
+    def pick_for_slot(slot, n=3):
+        cats = SLOT_CATEGORIES[slot]
+        pool = filtered[filtered['Category'].isin(cats)]
+        # Drop duplicates by subcategory so we get variety
+        pool = pool.drop_duplicates(subset=['Subcategory'])
+        # Take top scored, then shuffle slightly for variety
+        top = pool.head(n * 3)
+        sample = top.sample(min(n, len(top)), random_state=random.randint(0, 9999))
+        return [{
+            'name':        row['Food Name'],
+            'category':    row['Category'],
+            'subcategory': row['Subcategory'],
+            'servingSize': row['Serving Size'],
+            'calories':    int(row['Calories']),
+            'protein':     float(row['Protein (g)']),
+            'healthy':     bool(row['Healthy']),
+        } for _, row in sample.iterrows()]
+
+    recommendations = {
+        'breakfast': pick_for_slot('breakfast'),
+        'lunch':     pick_for_slot('lunch'),
+        'dinner':    pick_for_slot('dinner'),
+        'snack':     pick_for_slot('snack'),
+    }
+
+    return jsonify({
+        'bmi':           bmi,
+        'bmr':           round(bmr),
+        'dailyCalories': daily_calories,
+        'goal':          goal,
+        'recommendations': recommendations,
     }), 200
 
 

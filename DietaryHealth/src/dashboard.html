@@ -118,6 +118,33 @@
     }
     .insight-text .insight-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
     .insight-text p { font-size: 13px; color: var(--fg-muted); margin: 0; }
+
+    /* Recommendations */
+    .rec-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .rec-slots { grid-template-columns: 1fr; } }
+    .rec-slot-title {
+      font-size: 11px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+    }
+    .rec-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .rec-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .rec-badge {
+      width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
+      background: var(--accent-light); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .rec-name { font-size: 13px; font-weight: 600; line-height: 1.3; }
+    .rec-meta { font-size: 12px; color: var(--fg-muted); margin-top: 2px; }
+    .rec-healthy {
+      font-size: 10px; font-weight: 700; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--accent);
+      background: var(--accent-light); border-radius: 4px;
+      padding: 1px 5px; margin-left: 4px; vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -201,21 +228,25 @@
       <div id="mealList"></div>
     </div>
 
+    <!-- Recommendations -->
+    <div class="card card-full" id="recsCard">
+      <div class="card-title">Recommended Foods For You</div>
+      <div id="recsLoading" style="text-align:center;padding:20px 0;color:var(--fg-muted);font-size:14px;">
+        Loading recommendations…
+      </div>
+      <div id="recsStats" style="display:none; margin-bottom:16px; padding:12px 14px; background:var(--accent-light); border-radius:8px; font-size:13px; color:var(--fg);">
+      </div>
+      <div id="recsContent" style="display:none;">
+        <div class="rec-slots" id="recSlots"></div>
+      </div>
+      <div id="recsError" style="display:none;text-align:center;padding:20px 0;color:var(--fg-muted);font-size:14px;"></div>
+    </div>
+
   </div>
 </div>
 
 <script>
-  // Clear old demo data if version flag hasn't been set
-  const DATA_VERSION = 'v2-no-seed';
-  if (localStorage.getItem('dh_dataVersion') !== DATA_VERSION) {
-    try { localStorage.removeItem('dh_mealLog'); } catch(e) {}
-    try { localStorage.removeItem('dh_water'); } catch(e) {}
-    try {
-      Object.keys(localStorage).filter(k => k.startsWith('dh_water_') || k.startsWith('dh_meals_'))
-        .forEach(k => localStorage.removeItem(k));
-    } catch(e) {}
-    try { localStorage.setItem('dh_dataVersion', DATA_VERSION); } catch(e) {}
-  }
+  const API = 'http://127.0.0.1:5000';
 
   // Show today's date + time-based greeting
   const d = new Date();
@@ -223,29 +254,19 @@
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
   const hour = d.getHours();
-  const timeGreeting = hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
-  document.getElementById('greetingTime').textContent = timeGreeting;
+  document.getElementById('greetingTime').textContent =
+    hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
 
-  // Show logged-in user's name
+  // Show name from localStorage (set at login/register)
   try {
     const u = JSON.parse(localStorage.getItem('dh_user') || '{}');
     const name = u.firstName || u.username || '';
     if (name) document.getElementById('greetingName').textContent = 'Welcome back, ' + name + '.';
   } catch(e) {}
 
-  // Water tracker — reads/writes both dh_water (legacy) AND dh_water_YYYY-MM-DD (shared with calendar)
+  // ── Water tracker ───────────────────────────────────────────────
   const CUPS = 8;
-  const todayKey = 'dh_water_' + d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
-
   let filled = 0;
-  try {
-    // Prefer the per-date key; fall back to legacy key
-    const perDay = localStorage.getItem(todayKey);
-    const legacy = localStorage.getItem('dh_water');
-    filled = parseInt(perDay !== null ? perDay : (legacy || '0'), 10) || 0;
-  } catch(e) {}
 
   function renderCups() {
     const wrap = document.getElementById('waterCups');
@@ -253,64 +274,171 @@
     for (let i = 0; i < CUPS; i++) {
       const cup = document.createElement('div');
       cup.className = 'cup' + (i < filled ? ' filled' : '');
-      cup.title = i < filled ? 'Click to un-log' : 'Click to log';
-      cup.onclick = () => {
-        filled = (i < filled) ? i : i + 1;
-        try {
-          localStorage.setItem(todayKey, String(filled));
-          localStorage.setItem('dh_water', String(filled)); // keep legacy in sync
-        } catch(e) {}
-        renderCups();
-      };
+      cup.title = i < filled ? 'Click to un-log' : 'Click to log a glass';
+      cup.onclick = () => setWater(i < filled ? i : i + 1);
       wrap.appendChild(cup);
     }
     document.getElementById('waterLabel').textContent = `${filled} of ${CUPS} glasses`;
   }
-  renderCups();
 
-  // ── Load today's meals from localStorage and render ──
-  const dateStr = d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
-  const mealKey = 'dh_meals_' + dateStr;
+  async function setWater(cups) {
+    filled = cups;
+    renderCups(); // optimistic update
+    try {
+      await fetch(API + '/api/water', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ cups }),
+      });
+    } catch(e) { /* silent — UI already updated */ }
+  }
 
-  let meals = [];
-  try { meals = JSON.parse(localStorage.getItem(mealKey) || '[]'); } catch(e) {}
-
-  const mealList = document.getElementById('mealList');
+  // ── Render meals list ───────────────────────────────────────────
   const typeLabel = { breakfast:'B', lunch:'L', dinner:'D', snack:'S' };
 
-  if (meals.length === 0) {
-    mealList.innerHTML = `
-      <div style="text-align:center;padding:24px 0;color:var(--fg-muted);font-size:14px;">
-        Nothing logged today yet.
-        <br><a href="calendar.html" style="color:var(--accent);font-weight:600;margin-top:8px;display:inline-block;">+ Log your first meal</a>
-      </div>`;
-  } else {
+  function renderMeals(meals, calorieGoal) {
+    const mealList = document.getElementById('mealList');
+    if (!meals || meals.length === 0) {
+      mealList.innerHTML = `
+        <div style="text-align:center;padding:24px 0;color:var(--fg-muted);font-size:14px;">
+          Nothing logged today yet.
+          <br><a href="calendar.html" style="color:var(--accent);font-weight:600;margin-top:8px;display:inline-block;">+ Log your first meal</a>
+        </div>`;
+      return;
+    }
+
     let totalCals = 0;
+    mealList.innerHTML = '';
     meals.forEach(m => {
-      totalCals += (m.calories || 0);
+      totalCals += (m.kcal || 0);
       const row = document.createElement('div');
       row.className = 'meal-row';
-      const lbl = typeLabel[(m.type||'').toLowerCase()] || '?';
+      const lbl = typeLabel[(m.mealSlot || '').toLowerCase()] || '?';
+      const timeStr = m.loggedAt ? m.loggedAt.substring(11, 16) : '';
       row.innerHTML = `
         <div class="meal-icon" style="font-size:11px;font-weight:700;">${lbl}</div>
         <div class="meal-info">
-          <div class="meal-name">${m.name || 'Meal'}</div>
-          <div class="meal-meta">${m.type || ''} · ${m.time || ''}</div>
+          <div class="meal-name">${m.foodName || 'Meal'}</div>
+          <div class="meal-meta">${m.mealSlot || ''} · ${timeStr}</div>
         </div>
-        <div class="meal-cals">${m.calories ? m.calories + ' kcal' : '—'}</div>`;
+        <div class="meal-cals">${m.kcal ? m.kcal + ' kcal' : '—'}</div>`;
       mealList.appendChild(row);
     });
 
     // Update calorie tile
+    const goal = calorieGoal || 2000;
     document.getElementById('calValue').innerHTML =
       `${totalCals.toLocaleString()} <span class="stat-tile-unit">kcal</span>`;
     document.getElementById('calValue').style.color = 'var(--fg)';
     document.getElementById('calEaten').textContent = totalCals.toLocaleString() + ' eaten';
-    document.getElementById('calLeft').textContent = '';
-    const pct = Math.min(100, Math.round(totalCals / 2000 * 100));
+    const remaining = goal - totalCals;
+    document.getElementById('calLeft').textContent =
+      remaining > 0 ? remaining.toLocaleString() + ' remaining' : 'Goal reached! 🎉';
+    const pct = Math.min(100, Math.round(totalCals / goal * 100));
     document.getElementById('calBar').style.width = pct + '%';
+  }
+
+  // ── Load all dashboard data from API ───────────────────────────
+  async function loadDashboard() {
+    try {
+      const res = await fetch(API + '/api/dashboard/today', {
+        credentials: 'include',
+      });
+      if (res.status === 401) {
+        // Not logged in — nav.js will redirect, but just in case:
+        window.location.href = 'login.html';
+        return;
+      }
+      if (!res.ok) return;
+
+      const data = await res.json();
+
+      // Water
+      filled = data.cupsToday || 0;
+      renderCups();
+
+      // Meals + calories
+      renderMeals(data.meals, data.calorieGoal);
+
+    } catch(e) {
+      // Server not running — render empty state
+      renderCups();
+      renderMeals([], 2000);
+    }
+  }
+
+  renderCups();         // show 0 cups immediately
+  loadDashboard();      // then fetch real data
+  loadRecommendations();
+
+  // ── Recommendations ─────────────────────────────────────────────────────
+  const SLOT_EMOJI = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '🍎' };
+  const SLOT_LABEL = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', snack: 'Snack' };
+
+  async function loadRecommendations() {
+    try {
+      const res = await fetch(API + '/api/recommendations', { credentials: 'include' });
+      if (res.status === 401) return; // nav.js handles redirect
+      if (res.status === 404) {
+        // Profile not filled out yet
+        document.getElementById('recsLoading').style.display = 'none';
+        document.getElementById('recsError').style.display = 'block';
+        document.getElementById('recsError').textContent =
+          'Complete your profile questionnaire to see personalized recommendations.';
+        return;
+      }
+      if (!res.ok) throw new Error('API error');
+
+      const data = await res.json();
+
+      // Stats strip
+      const goalText = data.goal
+        ? data.goal.charAt(0).toUpperCase() + data.goal.slice(1)
+        : 'Maintain weight';
+      document.getElementById('recsStats').style.display = 'block';
+      document.getElementById('recsStats').innerHTML =
+        `<strong>Your daily target: ${data.dailyCalories.toLocaleString()} kcal</strong>
+         &nbsp;·&nbsp; BMI: ${data.bmi}
+         &nbsp;·&nbsp; Goal: ${goalText}`;
+
+      // Build slot cards
+      const slots = document.getElementById('recSlots');
+      slots.innerHTML = '';
+      ['breakfast', 'lunch', 'dinner', 'snack'].forEach(slot => {
+        const items = data.recommendations[slot] || [];
+        if (!items.length) return;
+
+        const section = document.createElement('div');
+        section.innerHTML = `<div class="rec-slot-title">${SLOT_EMOJI[slot]} ${SLOT_LABEL[slot]}</div>`;
+
+        items.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'rec-item';
+          div.innerHTML = `
+            <div class="rec-badge">${SLOT_EMOJI[slot]}</div>
+            <div>
+              <div class="rec-name">
+                ${item.name}
+                ${item.healthy ? '<span class="rec-healthy">✓ healthy</span>' : ''}
+              </div>
+              <div class="rec-meta">${item.subcategory} · ${item.calories} kcal · ${item.protein}g protein · ${item.servingSize}</div>
+            </div>`;
+          section.appendChild(div);
+        });
+
+        slots.appendChild(section);
+      });
+
+      document.getElementById('recsLoading').style.display = 'none';
+      document.getElementById('recsContent').style.display = 'block';
+
+    } catch(e) {
+      document.getElementById('recsLoading').style.display = 'none';
+      document.getElementById('recsError').style.display = 'block';
+      document.getElementById('recsError').textContent =
+        'Could not load recommendations. Make sure app.py is running.';
+    }
   }
 </script>
 <script src="js/nav.js"></script>
