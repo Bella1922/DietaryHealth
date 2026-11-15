@@ -8,6 +8,9 @@ Run:
 
 Then open your frontend at http://127.0.0.1:5500 (VS Code Live Server)
 and the API will be at http://127.0.0.1:5000/api/...
+
+SECURITY NOTE: Passwords are NEVER stored in plaintext.
+bcrypt hashes them before they touch the database.
 """
 
 from flask import Flask, request, jsonify, session
@@ -25,9 +28,20 @@ try:
 except ImportError:
     _PANDAS_OK = False
 
-# Path to the Walmart CSV (lives in backend/ folder next to Rachel's notebook)
-_BACKEND_DIR = os.path.join(os.path.dirname(__file__), 'backend')
-CSV_PATH = os.path.join(_BACKEND_DIR, 'Food_from_Walmart_with_healthy_474.csv')
+# Path to the Walmart CSV — search a few likely locations
+def _find_csv():
+    base = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(base, 'backend', 'Food_from_Walmart_with_healthy_474.csv'),
+        os.path.join(base, 'DietaryHealth', 'src', 'backend', 'Food_from_Walmart_with_healthy_474.csv'),
+        os.path.join(base, 'src', 'backend', 'Food_from_Walmart_with_healthy_474.csv'),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return candidates[0]  # fallback (will show warning if missing)
+
+CSV_PATH = _find_csv()
 
 # Cache the dataframe so we don't reload it on every request
 _food_df = None
@@ -57,6 +71,72 @@ def get_db():
     conn.row_factory = sqlite3.Row   # lets us access columns by name
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
+
+
+def init_db():
+    """Create all tables if they don't exist yet."""
+    conn = get_db()
+    conn.executescript('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        created_at DATETIME DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS user_profiles (
+        user_id INTEGER PRIMARY KEY REFERENCES users(id),
+        age INTEGER,
+        gender TEXT,
+        activity_level TEXT,
+        height_cm REAL,
+        weight_kg REAL,
+        calorie_goal INTEGER DEFAULT 2000,
+        updated_at DATETIME DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS user_dietary_restrictions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER REFERENCES users(id),
+        restriction TEXT NOT NULL,
+        UNIQUE(user_id, restriction)
+    );
+    CREATE TABLE IF NOT EXISTS user_allergies (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER REFERENCES users(id),
+        allergen TEXT NOT NULL,
+        UNIQUE(user_id, allergen)
+    );
+    CREATE TABLE IF NOT EXISTS user_goals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER REFERENCES users(id),
+        goal TEXT NOT NULL,
+        UNIQUE(user_id, goal)
+    );
+    CREATE TABLE IF NOT EXISTS meal_logs (
+        log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER REFERENCES users(id),
+        log_date TEXT NOT NULL,
+        meal_slot TEXT NOT NULL,
+        food_name TEXT NOT NULL,
+        kcal INTEGER DEFAULT 0,
+        protein_g REAL,
+        carbs_g REAL,
+        fat_g REAL,
+        logged_at DATETIME DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS water_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER REFERENCES users(id),
+        log_date TEXT NOT NULL,
+        cups INTEGER DEFAULT 0,
+        updated_at DATETIME DEFAULT (datetime('now')),
+        UNIQUE(user_id, log_date)
+    );
+    ''')
+    conn.commit()
+    conn.close()
 
 
 # ─────────────────────────────────────────────
@@ -236,6 +316,24 @@ def save_profile():
             "INSERT OR IGNORE INTO user_allergies (user_id, allergen) VALUES (?, ?)",
             (user_id, a)
         )
+
+    # Foods to avoid (free-text) — stored as dietary restrictions prefixed with "avoid:"
+    conn.execute("DELETE FROM user_dietary_restrictions WHERE user_id = ? AND restriction LIKE 'avoid:%'", (user_id,))
+    for f in data.get('foodsDislike', []):
+        if f:
+            conn.execute(
+                "INSERT OR IGNORE INTO user_dietary_restrictions (user_id, restriction) VALUES (?, ?)",
+                (user_id, f'avoid:{f.lower()}')
+            )
+
+    # Foods enjoyed (free-text) — stored as dietary restrictions prefixed with "like:"
+    conn.execute("DELETE FROM user_dietary_restrictions WHERE user_id = ? AND restriction LIKE 'like:%'", (user_id,))
+    for f in data.get('foodsLike', []):
+        if f:
+            conn.execute(
+                "INSERT OR IGNORE INTO user_dietary_restrictions (user_id, restriction) VALUES (?, ?)",
+                (user_id, f'like:{f.lower()}')
+            )
 
     # Goals — replace all
     conn.execute("DELETE FROM user_goals WHERE user_id = ?", (user_id,))
@@ -539,9 +637,14 @@ def get_recommendations():
            FROM user_profiles WHERE user_id = ?""", (user_id,)
     ).fetchone()
 
-    restrictions = [r['restriction'].lower() for r in conn.execute(
+    all_restrictions = [r['restriction'].lower() for r in conn.execute(
         "SELECT restriction FROM user_dietary_restrictions WHERE user_id = ?", (user_id,)
     ).fetchall()]
+
+    # Separate liked foods, avoided foods, and regular restrictions
+    restrictions = [r for r in all_restrictions if not r.startswith('avoid:') and not r.startswith('like:')]
+    foods_dislike = [r[6:] for r in all_restrictions if r.startswith('avoid:')]
+    foods_like    = [r[5:] for r in all_restrictions if r.startswith('like:')]
 
     allergies = [a['allergen'].lower() for a in conn.execute(
         "SELECT allergen FROM user_allergies WHERE user_id = ?", (user_id,)
@@ -598,17 +701,56 @@ def get_recommendations():
             'warning': 'Food data not available. Make sure pandas is installed and the CSV is in backend/.'
         }), 200
 
-    blocked = restrictions + allergies  # combined list of things to avoid
+    # Expand restriction/allergy terms into all related keywords to catch CSV category names
+    BLOCK_KEYWORDS = {
+        'no seafood':    ['seafood', 'fish', 'salmon', 'tuna', 'shrimp', 'crab', 'lobster', 'sardine', 'tilapia', 'cod', 'halibut', 'canned seafood', 'meat & seafood'],
+        'seafood':       ['seafood', 'fish', 'salmon', 'tuna', 'shrimp', 'crab', 'lobster', 'sardine', 'tilapia', 'cod', 'halibut', 'canned seafood', 'meat & seafood'],
+        'fish':          ['fish', 'salmon', 'tuna', 'tilapia', 'cod', 'halibut', 'sardine', 'canned seafood', 'seafood'],
+        'shellfish':     ['shrimp', 'crab', 'lobster', 'scallop', 'clam', 'oyster', 'shellfish'],
+        'vegan':         ['meat', 'poultry', 'seafood', 'fish', 'dairy', 'eggs', 'honey', 'beef', 'pork', 'chicken', 'turkey'],
+        'vegetarian':    ['meat', 'poultry', 'seafood', 'fish', 'beef', 'pork', 'chicken', 'turkey'],
+        'gluten-free':   ['bread', 'pasta', 'wheat', 'flour', 'cereal', 'cracker', 'biscuit', 'bakery'],
+        'dairy-free':    ['milk', 'cheese', 'butter', 'cream', 'yogurt', 'dairy'],
+        'milk':          ['milk', 'cheese', 'butter', 'cream', 'yogurt', 'dairy & eggs'],
+        'egg':           ['egg'],
+        'peanut':        ['peanut'],
+        'tree nut':      ['almond', 'cashew', 'walnut', 'pecan', 'pistachio', 'tree nut', 'nut'],
+        'soy':           ['soy', 'tofu', 'edamame'],
+        'wheat':         ['wheat', 'bread', 'flour', 'pasta', 'cereal'],
+        'sesame':        ['sesame', 'tahini'],
+        'red meat':      ['beef', 'pork', 'lamb', 'steak', 'ground beef', 'bacon'],
+        'meat':          ['meat', 'beef', 'pork', 'chicken', 'turkey', 'poultry', 'lamb'],
+        'pork':          ['pork', 'bacon', 'ham', 'sausage'],
+        'chicken':       ['chicken', 'poultry'],
+    }
 
-    if blocked:
-        # Remove any row where Category, Subcategory, or Food Name contains a blocked term
+    # Build the full set of keywords to block
+    blocked_keywords = set()
+    for term in restrictions + allergies + foods_dislike:
+        t = term.lower()
+        # Handle "avoid:seafood" style terms saved from free-text
+        if t.startswith('avoid:'):
+            t = t[6:].strip()
+        if t in BLOCK_KEYWORDS:
+            blocked_keywords.update(BLOCK_KEYWORDS[t])
+        else:
+            # Free-text: split into words and block each one directly
+            for word in t.replace(',', ' ').split():
+                word = word.strip()
+                if len(word) > 2:  # skip very short words like "no", "or"
+                    if word in BLOCK_KEYWORDS:
+                        blocked_keywords.update(BLOCK_KEYWORDS[word])
+                    else:
+                        blocked_keywords.add(word)
+
+    if blocked_keywords:
         def row_blocked(row):
             text = ' '.join([
                 str(row.get('Category', '')),
                 str(row.get('Subcategory', '')),
                 str(row.get('Food Name', '')),
             ]).lower()
-            return any(b in text for b in blocked)
+            return any(kw in text for kw in blocked_keywords)
         mask = df.apply(row_blocked, axis=1)
         filtered = df[~mask].copy()
     else:
@@ -634,6 +776,13 @@ def get_recommendations():
             filtered['Healthy'].astype(int) * 2
             + filtered['Protein (g)'] / 10
         )
+
+    # ── Boost score for foods the user said they enjoy ──────────────────────
+    if foods_like:
+        def liked_boost(row):
+            name_text = str(row.get('Food Name', '')).lower()
+            return 5 if any(liked in name_text for liked in foods_like) else 0
+        filtered['_score'] = filtered['_score'] + filtered.apply(liked_boost, axis=1)
 
     filtered = filtered.sort_values('_score', ascending=False)
 
@@ -684,6 +833,7 @@ def get_recommendations():
 # ─────────────────────────────────────────────
 
 if __name__ == '__main__':
+    init_db()
     print(f"Database: {DB_PATH}")
     print("API running at http://127.0.0.1:5000")
     print("Keep this terminal open while using the app.")

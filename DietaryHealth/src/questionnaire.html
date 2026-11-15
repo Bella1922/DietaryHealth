@@ -241,11 +241,11 @@
     </div>
     <div class="section">
       <div class="check-list">
-        <label class="check-option"><input type="checkbox" name="diet" value="vegan">       Vegan</label>
-        <label class="check-option"><input type="checkbox" name="diet" value="vegetarian">  Vegetarian</label>
-        <label class="check-option"><input type="checkbox" name="diet" value="pescatarian"> Pescatarian</label>
-
-        <label class="check-option"><input type="checkbox" name="diet" value="none">        None / No restrictions</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="vegan">        Vegan</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="vegetarian">   Vegetarian</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="pescatarian">  Pescatarian</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="no seafood">   No seafood / fish</label>
+        <label class="check-option"><input type="checkbox" name="diet" value="none">         None / No restrictions</label>
       </div>
       <div style="margin-top:16px">
         <label class="field-label" for="dietOther">Anything else?</label>
@@ -627,6 +627,18 @@
     const goal = goalStr();
     const goals = (goal && goal !== '—') ? [goal] : [];
 
+    // Foods enjoyed (free text) — split by comma/newline, skip if empty
+    const foodsLikeRaw = document.getElementById('foodsLike').value.trim();
+    const foodsLike = foodsLikeRaw
+      ? foodsLikeRaw.split(/[,\n]+/).map(s => s.trim().toLowerCase()).filter(Boolean)
+      : [];
+
+    // Foods to avoid (free text) — split by comma/newline, skip if empty
+    const foodsDislikeRaw = document.getElementById('foodsDislike').value.trim();
+    const foodsDislike = foodsDislikeRaw
+      ? foodsDislikeRaw.split(/[,\n]+/).map(s => s.trim().toLowerCase()).filter(Boolean)
+      : [];
+
     return {
       age:               parseInt(document.getElementById('age').value) || null,
       gender:            getRadio('gender') !== '—' ? getRadio('gender') : null,
@@ -636,6 +648,8 @@
       calorieGoal:       2000,   // default; will be computed properly later
       dietaryRestrictions: dietChecked,
       allergies:         allergyChecked,
+      foodsLike,
+      foodsDislike,
       goals,
     };
   }
@@ -658,42 +672,28 @@
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        if (res.status === 401) {
-          // Session expired — redirect to login
-          alert('Your session expired. Please log in again.');
-          window.location.href = 'login.html';
-          return;
-        }
         btn.textContent = 'Generate my diet plan';
         btn.disabled = false;
-        alert(data.error || 'Could not save profile. Please try again.');
+        if (res.status === 401) {
+          // Session expired — go log in again, then come back
+          if (confirm('Your session expired. Click OK to go log in again — your answers will be lost, sorry!')) {
+            window.location.href = 'login.html';
+          }
+          return;
+        }
+        alert('Error ' + res.status + ': ' + (data.error || 'Could not save profile. Please try again.'));
         return;
       }
 
-      // Also update localStorage copy so nav.js and dashboard see it immediately
+      // Update localStorage so dashboard knows profile is saved
       try {
         const user = JSON.parse(localStorage.getItem('dh_user') || '{}');
         user.profileSaved = true;
         localStorage.setItem('dh_user', JSON.stringify(user));
       } catch(e) {}
 
-      // Show success screen
-      document.getElementById('step-5').innerHTML =
-        '<div class="part-header">' +
-          '<div class="part-eyebrow">All set</div>' +
-          '<h1 class="part-title">Your profile is saved.</h1>' +
-          '<p class="part-desc">Head to your dashboard to start logging meals.</p>' +
-        '</div>' +
-        '<div class="submit-banner" style="text-align:left">' +
-          '<p style="font-size:15px;font-weight:600;margin-bottom:8px">What happens next</p>' +
-          '<p style="margin-bottom:8px">• Your daily calorie and nutrient targets are set.</p>' +
-          '<p style="margin-bottom:8px">• Your calendar is ready — start logging today\'s meals.</p>' +
-          '<p style="margin-bottom:16px">• You can update your profile at any time from the nav menu.</p>' +
-          '<a href="dashboard.html" class="btn btn-primary">Go to Dashboard →</a>' +
-        '</div>';
-      document.getElementById('progressLabel').textContent = 'Complete';
-      document.getElementById('progressFill').style.width = '100%';
-      document.querySelectorAll('.step-dot').forEach(function(d) { d.classList.remove('active'); d.classList.add('done'); });
+      // Go straight to dashboard
+      window.location.href = 'dashboard.html';
 
     } catch(e) {
       btn.textContent = 'Generate my diet plan';
